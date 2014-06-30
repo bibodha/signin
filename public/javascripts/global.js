@@ -47,13 +47,15 @@ var SigninModel = function () {
 		if(errorCount === 0) {
 
 			var newUser = {
-				'username': $('#addUser fieldset input#inputUserName').val(),
-				'email': $('#addUser fieldset input#inputUserEmail').val(),
-				'fullname': $('#addUser fieldset input#inputUserFullname').val(),
-				'age': $('#addUser fieldset input#inputUserAge').val(),
-				'location': $('#addUser fieldset input#inputUserLocation').val(),
-				'gender': $('#addUser fieldset input#inputUserGender').val()
-			}
+				'username': $('#inputUserName').val(),
+				'email': $('#inputUserEmail').val(),
+				'fullname': $('#inputUserFullname').val(),
+				'age': $('#inputUserAge').val(),
+				'location': $('#inputUserLocation').val(),
+				'gender': $('#inputUserGender').val()
+			};
+
+			console.log('New User:', newUser);
 
 			$.ajax({
 				type: 'POST',
@@ -62,8 +64,8 @@ var SigninModel = function () {
 				dataType: 'JSON'
 			}).done(function( response ) {
 				if (response.msg === '') {
-					$('#addUser fieldset input').val('');
-					populateTable();
+					$('').val('');
+					self.populateTable();
 				}
 				else {
 					alert('Error: ' + response.msg);
@@ -90,7 +92,7 @@ var SigninModel = function () {
 				else {
 					alert('Error: ' + response.msg);
 				}
-				populateTable();
+				self.populateTable();
 			});
 		}
 		else {
@@ -105,7 +107,7 @@ var SigninModel = function () {
 			type: 'POST',
 			url: '/users/getuser/' + $(this).attr('rel')
 		}).done(function(res){
-			if(res.err === null){ 
+			if(res.err === null){
 				var user = res.msg;
 				$('#inputUserName').val(user.username);
 				$('#inputUserEmail').val(user.email);
@@ -139,7 +141,7 @@ $(document).ready(function() {
 	var signin = new SigninModel();
 	signin.populateTable();
 	$('#userList table tbody').on('click', 'td a.linkshowuser', signin.showUserInfo);
-	$('#btnAddUser').on('click', addUser);
+	$('#btnAddUser').on('click', signin.addUser);
 	$('#userList table tbody').on('click', 'td a.linkdeleteuser', signin.deleteUser);
 	$('#userList table tbody').on('click', 'td a.linkedituser', signin.editUser);
 	$('#contentTab').tab();
@@ -155,6 +157,6 @@ $(document).ready(function() {
 		}
 	});
 	$('#signinBtn').click(function(){
-		signin($('#signinTextBox').val());
+		signin.signin($('#signinTextBox').val());
 	});
 });
