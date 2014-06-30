@@ -33,4 +33,4 @@ node_modules
 *.iws
 
 #Data directory used by mongo
-data
+data/
