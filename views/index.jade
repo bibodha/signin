@@ -1,5 +1,73 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	div#contentTab.nav.nav-tabs
+		li.active
+			a(href="#signin", data-toggle="tab") Signin
+		li
+			a(href="#manage", data-toggle="tab") Manage
+
+	div.tab-content
+		div.tab-pane.active#signin
+			h1='Signin'
+			div.input-group.input-group-lg.signinArea
+				input.form-control#signinTextBox(type='text', placeholder='Name')
+				span.input-group-btn
+					button.btn.btn-default#signinBtn(type='button') Signin
+
+		div.tab-pane#manage
+			h1= 'User Management'
+			#wrapper
+				#userInfo
+					h2 User Info
+					p
+						strong Name:
+						|  <span id='userInfoName'></span>
+						br
+						strong Age:
+						|  <span id='userInfoAge'></span>
+						br
+						strong Gender:
+						|  <span id='userInfoGender'></span>
+						br
+						strong Location:
+						|  <span id='userInfoLocation'></span>
+
+				h2 User List
+				#userList
+					table
+						thead
+							th UserName
+							th Email
+							th Delete?
+							th Edit
+						tbody
+				// /USER LIST
+
+				// ADD USER
+				-if(edit){
+					h2 Edit User
+					#editUser
+				-}
+				-else{
+					h2 Add User
+					#addUser
+				-}
+						fieldset
+							input#inputUserName(type='text', placeholder='Username')
+							input#inputUserEmail(type='text', placeholder='Email')
+							br
+							input#inputUserFullname(type='text', placeholder='Full Name')
+							input#inputUserAge(type='text', placeholder='Age')
+							br
+							input#inputUserLocation(type='text', placeholder='Location')
+							input#inputUserGender(type='text', placeholder='gender')
+							br
+							-if(edit){
+								button#btnEditUser Edit User
+							-}
+							-else{
+								button#btnAddUser Add User
+							-}
+				// /ADD USER
+			// /WRAPPER
