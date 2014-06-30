@@ -1,7 +1,27 @@
 var SigninModel = function () {
 	var self = this,
-	userListData = [];
+		userListData = [],
+		userPropertyList = [
+			'username',
+			'email',
+			'fullname',
+			'age',
+			'location',
+			'gender'
+		];
 
+	self.getUserObjectFromForm = function(){
+		var output = {};
+		userPropertyList.forEach(function(fieldName){
+			output[fieldName] = $('#input-' + fieldName).val();
+		});
+		return output;
+	};
+	self.setUserObjectToForm = function(user){
+		userPropertyList.forEach(function(fieldName){
+			$('#input-' + fieldName).val(user[fieldName]);
+		});
+	};
 
 	self.populateTable = function () {
 
@@ -40,20 +60,13 @@ var SigninModel = function () {
 		event.preventDefault();
 
 		var errorCount = 0;
-		$('#addUser input').each(function(index, val) {
+		$('#addUser input').each(function(index) {
 			if($(this).val() === '') { errorCount++; }
 		});
 
 		if(errorCount === 0) {
 
-			var newUser = {
-				'username': $('#inputUserName').val(),
-				'email': $('#inputUserEmail').val(),
-				'fullname': $('#inputUserFullname').val(),
-				'age': $('#inputUserAge').val(),
-				'location': $('#inputUserLocation').val(),
-				'gender': $('#inputUserGender').val()
-			};
+			var newUser = self.setUserObjectToForm();
 
 			console.log('New User:', newUser);
 
@@ -109,12 +122,7 @@ var SigninModel = function () {
 		}).done(function(res){
 			if(res.err === null){
 				var user = res.msg;
-				$('#inputUserName').val(user.username);
-				$('#inputUserEmail').val(user.email);
-				$('#inputUserFullname').val(user.fullname);
-				$('#inputUserAge').val(user.age);
-				$('#inputUserLocation').val(user.location);
-				$('#inputUserGender').val(user.gender);
+				self.setUserObjectToForm(user);
 			}
 			else{
 				alert('Error: ' + res.msg);
