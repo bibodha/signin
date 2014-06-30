@@ -15,4 +15,5 @@ How to run
 ==========
 * Navigate to project root
 * Run mongodb by typing mongod --dbpath data/ (You may have to navigate to where you installed mongo if you didn't add it to your PATH)
+* Run the app by typing npm start
 * Open your web browser and navigate to localhost:3000
