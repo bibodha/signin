@@ -137,26 +137,26 @@ var SigninModel = function () {
 	};
 };
 
-$(document).ready(function() {
-	var signin = new SigninModel();
-	signin.populateTable();
-	$('#userList table tbody').on('click', 'td a.linkshowuser', signin.showUserInfo);
-	$('#btnAddUser').on('click', signin.addUser);
-	$('#userList table tbody').on('click', 'td a.linkdeleteuser', signin.deleteUser);
-	$('#userList table tbody').on('click', 'td a.linkedituser', signin.editUser);
-	$('#contentTab').tab();
-	$('#contentTab a').click(function(e){
-		e.preventDefault();
-		$('#contentTab li').removeClass('active');
-		$('.tab-content div.tab-pane').removeClass('active');
-		$(this).addClass('active');
-	});
+var $body = $(document.body),
+	mySignin = new SigninModel();
 
-	$('#signinTextBox').autocomplete({
-		source: function(request, response){
-		}
-	});
-	$('#signinBtn').click(function(){
-		signin.signin($('#signinTextBox').val());
-	});
+mySignin.populateTable();
+$body.on('click', '#signinBtn', function(){
+	mySignin.signin($('#signinTextBox').val());
+});
+$body.on('click', '#btnAddUser', mySignin.addUser);
+$body.on('click', 'td a.linkedituser', mySignin.editUser);
+$body.on('click', 'td a.linkshowuser', mySignin.showUserInfo);
+$body.on('click', 'td a.linkdeleteuser', mySignin.deleteUser);
+$('#contentTab').tab();
+$body.on('click', '#contentTab a', function(e){
+	e.preventDefault();
+	$('#contentTab li').removeClass('active');
+	$('.tab-content div.tab-pane').removeClass('active');
+	$(this).addClass('active');
+});
+
+$('#signinTextBox').autocomplete({
+	source: function(request, response){
+	}
 });
