@@ -1,15 +1,14 @@
-var signinModel = {
-	var userListData : [],
-		edit : false;
+var SigninModel = function () {
+	var self = this,
+	userListData = [];
 
-	var SigninModel: function(){
 
-	}
-	var populateTable : function(){
+	self.populateTable = function () {
+
 		var tableContent = '';
-
-		$.getJSON('/users/userlist', function(data){
+		$.getJSON( '/users/userlist', function( data ) {
 			userListData = data;
+
 			$.each(data, function(){
 				tableContent += '<tr>';
 				tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.username + '" title="Show Details">' + this.username + '</a></td>';
@@ -23,24 +22,21 @@ var signinModel = {
 		});
 	};
 
-	var showUserInfo : function(event){
+	self.showUserInfo = function (event) {
+
 		event.preventDefault();
-
-		var thisUserName = $(this).attr('rel');
-
-		var arrayPosition = userListData.map(function(arrayItem) {
-			return arrayItem.username; 
-		}).indexOf(thisUserName);
-
-		var thisUserObject = userListData[arrayPosition];
+		var thisUserName = $(this).attr('rel'),
+		arrayPosition = userListData.map(function(arrayItem) { return arrayItem.username; }).indexOf(thisUserName),
+		thisUserObject = userListData[arrayPosition];
 
 		$('#userInfoName').text(thisUserObject.fullname);
 		$('#userInfoAge').text(thisUserObject.age);
 		$('#userInfoGender').text(thisUserObject.gender);
 		$('#userInfoLocation').text(thisUserObject.location);
+
 	};
 
-	var addUser : function(event){
+	self.addUser = function (event) {
 		event.preventDefault();
 
 		var errorCount = 0;
@@ -51,12 +47,12 @@ var signinModel = {
 		if(errorCount === 0) {
 
 			var newUser = {
-				'username': $('#inputUserName').val(),
-				'email': $('#inputUserEmail').val(),
-				'fullname': $('#inputUserFullname').val(),
-				'age': $('#inputUserAge').val(),
-				'location': $('#inputUserLocation').val(),
-				'gender': $('#inputUserGender').val()
+				'username': $('#addUser fieldset input#inputUserName').val(),
+				'email': $('#addUser fieldset input#inputUserEmail').val(),
+				'fullname': $('#addUser fieldset input#inputUserFullname').val(),
+				'age': $('#addUser fieldset input#inputUserAge').val(),
+				'location': $('#addUser fieldset input#inputUserLocation').val(),
+				'gender': $('#addUser fieldset input#inputUserGender').val()
 			}
 
 			$.ajax({
@@ -80,9 +76,8 @@ var signinModel = {
 		}
 	};
 
-	var deleteUser : function(event){
+	self.deleteUser = function (event) {
 		event.preventDefault();
-
 		var confirmation = confirm('Are you sure you want to delete this user?');
 
 		if (confirmation === true) {
@@ -103,7 +98,7 @@ var signinModel = {
 		}
 	};
 
-	var editUser : function(event){
+	self.editUser = function(event){
 		event.preventDefault();
 		edit = true;
 		$.ajax({
@@ -125,7 +120,7 @@ var signinModel = {
 		});
 	};
 
-	var signin : function(name){
+	self.signin = function(name){
 		$.ajax({
 			type: 'POST',
 			url: '/users/signin/' + name
@@ -140,13 +135,13 @@ var signinModel = {
 	};
 };
 
-$(document).ready(function(){
+$(document).ready(function() {
 	var signin = new SigninModel();
 	signin.populateTable();
-	$('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
+	$('#userList table tbody').on('click', 'td a.linkshowuser', signin.showUserInfo);
 	$('#btnAddUser').on('click', addUser);
-	$('#userList table tbody').on('click', 'td a.linkdeleteuser', deleteUser);
-	$('#userList table tbody').on('click', 'td a.linkedituser', editUser);
+	$('#userList table tbody').on('click', 'td a.linkdeleteuser', signin.deleteUser);
+	$('#userList table tbody').on('click', 'td a.linkedituser', signin.editUser);
 	$('#contentTab').tab();
 	$('#contentTab a').click(function(e){
 		e.preventDefault();
@@ -162,4 +157,4 @@ $(document).ready(function(){
 	$('#signinBtn').click(function(){
 		signin($('#signinTextBox').val());
 	});
-};
+});
