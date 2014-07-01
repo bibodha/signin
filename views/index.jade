@@ -22,18 +22,19 @@ block content
 					h2 User Info
 					p
 						strong Name:
-						|  <span id='userInfoName'></span>
+						|	<span id='userInfoName'></span>
 						br
 						strong Age:
-						|  <span id='userInfoAge'></span>
+						|	<span id='userInfoAge'></span>
 						br
 						strong Gender:
-						|  <span id='userInfoGender'></span>
+						|	<span id='userInfoGender'></span>
 						br
 						strong Location:
-						|  <span id='userInfoLocation'></span>
+						|	<span id='userInfoLocation'></span>
 
 				h2 User List
+				button#addUserBtn.btn.btn-primary(type="button" data-toggle="modal" data-target="#addUserModal") Add User
 				#userList
 					table
 						thead
@@ -48,21 +49,50 @@ block content
 						tbody
 				// /USER LIST
 
-				// ADD USER
-				h3 Add User
+	// ADD USER
+	#addUserModal.modal.fade(role='dialog')
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button', data-dismiss='modal')
+						span.sr-only Close
+					h4#addUserModalLabel.modal-title Add User
+				.modal-body
 					#addUser
-						fieldset
-							input#input-username(type='text', placeholder='Username')
-							input#input-email(type='text', placeholder='Email')
-							br
-							input#input-fullname(type='text', placeholder='Full Name')
-							input#input-age(type='text', placeholder='Age')
-							br
-							input#input-location(type='text', placeholder='Location')
-							select#input-gender
-								option(value='Male') Male
-								option(value='Female') Female
-							br
-							button#btnAddUser Add User
+					form.form-horizontal(role='form')
+						.form-group
+							label.col-sm-2.control-label(for='inputUsername3') Username 
+							.col-sm-10
+								input#inputUsername3.form-control(type='text', placeholder='Username')
+						.form-group
+							label.col-sm-2.control-label(for='inputFullName3') FullName 
+							.col-sm-10
+								input#inputFullName3.form-control(type='text', placeholder='Full Name')
+						.form-group
+							label.col-sm-2.control-label(for='inputEmail3') Email
+							.col-sm-10
+								input#inputEmail3.form-control(type='email', placeholder='Email')
+						.form-group
+							label.col-sm-2.control-label(for='inputAge3') Age
+							.col-sm-10
+								input#inputAge3.form-control(type='age', placeholder='Age')
+						.form-group
+							label.col-sm-2.control-label(for='inputLocation3') Location
+							.col-sm-10
+								input#inputLocation3.form-control(type='location', placeholder='Location')
+						.form-group
+							label.col-sm-2.control-label(for='inputGender3') Gender
+							.col-sm-10
+								.dropdown
+									button.btn.btn-default#dLabel(role="button", data-toggle="dropdown", data-target="#") Gender 
+										span.caret
+									ul.dropdown-menu(role="menu")
+										li(role="presentation")
+											a(role="menuitem", tabindex="-1") Male
+										li(role="presentation")
+											a(role="menuitem", tabindex="-1") Female
+				.modal-footer
+					button.btn.btn-default(type="button", data-dismiss="modal") Close
+					button.btn.btn-primary(type="button") Save Changes
 				// /ADD USER
 			// /WRAPPER
