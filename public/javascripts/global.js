@@ -23,18 +23,31 @@ var SigninModel = function () {
 		});
 	};
 
+	self.getUserData = function() {
+		var items = '';
+		$.getJSON(' /users/userList', function(data){
+			items = data;
+		}).done(function(data){
+			console.log(data);
+		});
+	};
+
 	self.populateTable = function () {
 
 		var tableContent = '';
 		$.getJSON( '/users/userlist', function( data ) {
 			userListData = data;
 
-			$.each(data, function(){
-				tableContent += '<tr>';
-				tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.username + '" title="Show Details">' + this.username + '</a></td>';
-				tableContent += '<td>' + this.email + '</td>';
-				tableContent += '<td><a href="#" class="linkdeleteuser" rel="' + this._id + '">delete</a></td>';
-				tableContent += '<td><a href="#" class="linkedituser" rel="' + this._id + '">edit</a></td>';
+			$.each(data, function(i){
+				tableContent += '<tr id=row' + i + '>';
+				tableContent += '<td class="username"><a href="#" class="linkshowuser" rel="' + this.username + '" title="Show Details">' + this.username + '</a></td>';
+				tableContent += '<td class="fullname">' + this.fullname + '</td>';
+				tableContent += '<td class="email">' + this.email + '</td>';
+				tableContent += '<td class="location">' + this.location + '</td>';
+				tableContent += '<td class="age">' + this.age + '</td>';
+				tableContent += '<td class="gender">' + this.gender+ '</td>';
+				tableContent += '<td class="delete"><a href="#" class="linkdeleteuser" rel="' + this._id + '">delete</a></td>';
+				tableContent += '<td class="edit"><a href="#" class="linkedituser" rel="' + this._id + '">edit</a></td>';
 				tableContent += '</tr>';
 			});
 
@@ -43,7 +56,6 @@ var SigninModel = function () {
 	};
 
 	self.showUserInfo = function (event) {
-
 		event.preventDefault();
 		var thisUserName = $(this).attr('rel'),
 		arrayPosition = userListData.map(function(arrayItem) { return arrayItem.username; }).indexOf(thisUserName),
@@ -53,7 +65,6 @@ var SigninModel = function () {
 		$('#userInfoAge').text(thisUserObject.age);
 		$('#userInfoGender').text(thisUserObject.gender);
 		$('#userInfoLocation').text(thisUserObject.location);
-
 	};
 
 	self.addUser = function (event) {
@@ -163,8 +174,29 @@ $body.on('click', '#contentTab a', function(e){
 	$('.tab-content div.tab-pane').removeClass('active');
 	$(this).addClass('active');
 });
+$body.on('click', '.linkedituser', function(){
+	var rowId = $(this).parent().parent().children('td').each(function(index, value){
+		if(value.className === 'gender'){
+			var currentSelect = value.innerText;
+			this.innerHTML = '<select id="editGenderDropDown"><option value="Male">Male</option><option value="Female">Female</option></select>';
+			if(currentSelect === "Male"){
+				$('#editGenderDropDown').prop('selectedIndex', 0);
+			}
+			else{
+				$('#editGenderDropDown').prop('selectedIndex', 1);
+			}
+		}
+		else if(value.className === 'delete'){
+
+		}
+		else if(value.className === 'edit'){
+
+		}
+		else{
+			this.innerHTML = '<input type="text" value="'+this.innerText+'"></input>';
+		}
+	});
+});
 
 $('#signinTextBox').autocomplete({
-	source: function(request, response){
-	}
 });

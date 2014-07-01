@@ -38,21 +38,19 @@ block content
 					table
 						thead
 							th UserName
+							th FullName
 							th Email
+							th Location
+							th Age
+							th Gender
 							th Delete?
 							th Edit
 						tbody
 				// /USER LIST
 
 				// ADD USER
-				-if(edit){
-					h2 Edit User
-					#editUser
-				-}
-				-else{
-					h2 Add User
+				h3 Add User
 					#addUser
-				-}
 						fieldset
 							input#input-username(type='text', placeholder='Username')
 							input#input-email(type='text', placeholder='Email')
@@ -61,13 +59,10 @@ block content
 							input#input-age(type='text', placeholder='Age')
 							br
 							input#input-location(type='text', placeholder='Location')
-							input#input-gender(type='text', placeholder='Gender')
+							select#input-gender
+								option(value='Male') Male
+								option(value='Female') Female
 							br
-							-if(edit){
-								button#btnEditUser Edit User
-							-}
-							-else{
-								button#btnAddUser Add User
-							-}
+							button#btnAddUser Add User
 				// /ADD USER
 			// /WRAPPER
