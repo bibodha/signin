@@ -164,7 +164,6 @@ $body.on('click', '#signinBtn', function(){
 	mySignin.signin($('#signinTextBox').val());
 });
 $body.on('click', '#btnAddUser', mySignin.addUser);
-$body.on('click', 'td a.linkedituser', mySignin.editUser);
 $body.on('click', 'td a.linkshowuser', mySignin.showUserInfo);
 $body.on('click', 'td a.linkdeleteuser', mySignin.deleteUser);
 $('#contentTab').tab();
@@ -175,27 +174,33 @@ $body.on('click', '#contentTab a', function(e){
 	$(this).addClass('active');
 });
 $body.on('click', '.linkedituser', function(){
-	var rowId = $(this).parent().parent().children('td').each(function(index, value){
+	$(this).parent().parent().children('td').each(function(index, value){
+		var rowId = $(this.parentElement).attr('id');
 		if(value.className === 'gender'){
 			var currentSelect = value.innerText;
 			this.innerHTML = '<select id="editGenderDropDown"><option value="Male">Male</option><option value="Female">Female</option></select>';
 			if(currentSelect === "Male"){
-				$('#editGenderDropDown').prop('selectedIndex', 0);
+				$('#' + rowId + ' #editGenderDropDown').prop('selectedIndex', 0);
 			}
 			else{
-				$('#editGenderDropDown').prop('selectedIndex', 1);
+				$('#' + rowId + ' #editGenderDropDown').prop('selectedIndex', 1);
 			}
 		}
 		else if(value.className === 'delete'){
 
 		}
 		else if(value.className === 'edit'){
-
+			this.innerHTML = '<a href="#" id="editUpdate">Update</a>/<a href="#" id="editCancel">Cancel</a>'
 		}
 		else{
-			this.innerHTML = '<input type="text" value="'+this.innerText+'"></input>';
+			this.innerHTML = '<input type="text" id="edit' + value.className + '" value="'+this.innerText+'"></input>';
 		}
 	});
+});
+
+$body.on('click', 'editUpdate', function(){
+	var updateObj = {};
+	updateObj['fullname'] = $(this).parent().attr('#fullname').val();
 });
 
 $('#signinTextBox').autocomplete({
