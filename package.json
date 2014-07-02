@@ -13,7 +13,11 @@
     "body-parser": "~1.0.0",
     "debug": "~0.7.4",
     "jade": "~1.3.0",
-    "mongodb" : "*",
+    "mongodb": "*",
     "mongoskin": "*"
+  },
+  "devDependencies": {
+    "jquery.event.drag": "^2.2.2",
+    "slickgrid": "^2.1.0-1"
   }
 }

@@ -1,13 +1,18 @@
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/javascripts/bootstrap/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
-    script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
-    script(src='/javascripts/semantic/javascript/semantic.min.js')
-    script(src='/javascripts/bootstrap/js/bootstrap.min.js')
-    script(src='/javascripts/jquery-ui/js/jquery-ui-1.10.4.custom.min.js')
-    script(src='/javascripts/global.js')
+	head
+		title= title
+		link(rel='stylesheet', href='/javascripts/bootstrap/css/bootstrap.min.css')
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel='stylesheet', href='/javascripts/slickgrid/slick.grid.css')
+		link(rel='stylesheet', href='/javascripts/slickgrid/css/smoothness/jquery-ui-1.8.16.custom.css')
+
+	body
+		block content
+		script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
+		script(src='/javascripts/bootstrap/js/bootstrap.min.js')
+		script(src='/javascripts/jquery-ui/js/jquery-ui-1.10.4.custom.min.js')
+		script(src='/javascripts/global.js')
+		script(src='/javascripts/jquery.event.drag-2.2.js')
+		script(src='/javascripts/slickgrid/slick.core.js')
+		script(src='/javascripts/slickgrid/slick.grid.js')

@@ -8,7 +8,21 @@ var SigninModel = function () {
 			'age',
 			'location',
 			'gender'
-		];
+		],
+		grid,
+		columns = [
+			{id: "username", name: "Username", field: "username"},
+			{id: "fullName", name: "Full Name", field: "fullname"},
+			{id: "email", name: "Email", field: "email"},
+			{id: "age", name: "Age", field: "age"},
+			{id: "location", name: "Location", field: "location"},
+			{id: "gender", name: "Gender", field: "gender"}
+		],
+		options = {
+			enableCellNavigation: true,
+			enableColumnReorder: false,
+			headerRowHeight: 30
+		};
 
 	self.getUserObjectFromForm = function(){
 		var output = {};
@@ -33,25 +47,25 @@ var SigninModel = function () {
 	};
 
 	self.populateTable = function () {
-
 		var tableContent = '';
 		$.getJSON( '/users/userlist', function( data ) {
 			userListData = data;
 
-			$.each(data, function(i){
-				tableContent += '<tr id=row' + i + '>';
-				tableContent += '<td class="username"><a href="#" class="linkshowuser" rel="' + this.username + '" title="Show Details">' + this.username + '</a></td>';
-				tableContent += '<td class="fullname">' + this.fullname + '</td>';
-				tableContent += '<td class="email">' + this.email + '</td>';
-				tableContent += '<td class="location">' + this.location + '</td>';
-				tableContent += '<td class="age">' + this.age + '</td>';
-				tableContent += '<td class="gender">' + this.gender+ '</td>';
-				tableContent += '<td class="delete"><a href="#" class="linkdeleteuser" rel="' + this._id + '">delete</a></td>';
-				tableContent += '<td class="edit"><a href="#" class="linkedituser" rel="' + this._id + '">edit</a></td>';
-				tableContent += '</tr>';
-			});
+			grid = new Slick.Grid('#myGrid', data, columns, options);
+			// $.each(data, function(i){
+			// 	tableContent += '<tr id=row' + i + '>';
+			// 	tableContent += '<td class="username"><a href="#" class="linkshowuser" rel="' + this.username + '" title="Show Details">' + this.username + '</a></td>';
+			// 	tableContent += '<td class="fullname">' + this.fullname + '</td>';
+			// 	tableContent += '<td class="email">' + this.email + '</td>';
+			// 	tableContent += '<td class="location">' + this.location + '</td>';
+			// 	tableContent += '<td class="age">' + this.age + '</td>';
+			// 	tableContent += '<td class="gender">' + this.gender+ '</td>';
+			// 	tableContent += '<td class="delete"><a href="#" class="linkdeleteuser" rel="' + this._id + '">delete</a></td>';
+			// 	tableContent += '<td class="edit"><a href="#" class="linkedituser" rel="' + this._id + '">edit</a></td>';
+			// 	tableContent += '</tr>';
+			// });
 
-			$('#userList table tbody').html(tableContent);
+			// $('#userList table tbody').html(tableContent);
 		});
 	};
 
