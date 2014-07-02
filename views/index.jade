@@ -34,40 +34,40 @@ block content
 						|  <span id='userInfoLocation'></span>
 
 				h2 User List
-				#userList
-					table
-						thead
-							th UserName
-							th Email
-							th Delete?
-							th Edit
-						tbody
-				// /USER LIST
+
+				button#addUserBtn.btn.btn-primary(type="button" data-toggle="modal" data-target="#addUserModal") Add User
+				table(width='100%')
+					tr
+						td(valign='top', width='50%')
+							div#myGrid(style='width:600px;height:500px;')
+
+//				#userList
+//					table
+//						thead
+//							th UserName
+//							th FullName
+//							th Email
+//							th Location
+//							th Age
+//							th Gender
+//							th Delete?
+//							th Edit
+//						tbody
+//				// /USER LIST
 
 				// ADD USER
-				-if(edit){
-					h2 Edit User
-					#editUser
-				-}
-				-else{
-					h2 Add User
-					#addUser
-				-}
-						fieldset
-							input#input-username(type='text', placeholder='Username')
-							input#input-email(type='text', placeholder='Email')
-							br
-							input#input-fullname(type='text', placeholder='Full Name')
-							input#input-age(type='text', placeholder='Age')
-							br
-							input#input-location(type='text', placeholder='Location')
-							input#input-gender(type='text', placeholder='Gender')
-							br
-							-if(edit){
-								button#btnEditUser Edit User
-							-}
-							-else{
-								button#btnAddUser Add User
-							-}
+				h2 Add User
+				#addUser
+					fieldset
+						input#input-username(type='text', placeholder='Username')
+						input#input-email(type='text', placeholder='Email')
+						br
+						input#input-fullname(type='text', placeholder='Full Name')
+						input#input-age(type='text', placeholder='Age')
+						br
+						input#input-location(type='text', placeholder='Location')
+						input#input-gender(type='text', placeholder='Gender')
+						br
+							button#btnAddUser Add User
 				// /ADD USER
 			// /WRAPPER
