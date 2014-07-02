@@ -36,17 +36,26 @@ var SigninModel = function () {
 		});
 	};
 
+	self.getUserData = function() {
+		var items = '';
+		$.getJSON(' /users/userList', function(data){
+			items = data;
+		}).done(function(data){
+			console.log(data);
+		});
+	};
+
 	self.populateTable = function () {
 		var tableContent = '';
 		$.getJSON( '/users/userlist', function( data ) {
 			userListData = data;
+
 			grid = new Slick.Grid('#myGrid', data, columns, options);
 			grid.autoSizeColumns();
 		});
 	};
 
 	self.showUserInfo = function (event) {
-
 		event.preventDefault();
 		var thisUserName = $(this).attr('rel'),
 		arrayPosition = userListData.map(function(arrayItem) { return arrayItem.username; }).indexOf(thisUserName),
@@ -56,7 +65,6 @@ var SigninModel = function () {
 		$('#userInfoAge').text(thisUserObject.age);
 		$('#userInfoGender').text(thisUserObject.gender);
 		$('#userInfoLocation').text(thisUserObject.location);
-
 	};
 
 	self.addUser = function (event) {
@@ -156,7 +164,6 @@ $body.on('click', '#signinBtn', function(){
 	mySignin.signin($('#signinTextBox').val());
 });
 $body.on('click', '#btnAddUser', mySignin.addUser);
-$body.on('click', 'td a.linkedituser', mySignin.editUser);
 $body.on('click', 'td a.linkshowuser', mySignin.showUserInfo);
 $body.on('click', 'td a.linkdeleteuser', mySignin.deleteUser);
 $('#contentTab').tab();
@@ -166,8 +173,35 @@ $body.on('click', '#contentTab a', function(e){
 	$('.tab-content div.tab-pane').removeClass('active');
 	$(this).addClass('active');
 });
+$body.on('click', '.linkedituser', function(){
+	$(this).parent().parent().children('td').each(function(index, value){
+		var rowId = $(this.parentElement).attr('id');
+		if(value.className === 'gender'){
+			var currentSelect = value.innerText;
+			this.innerHTML = '<select id="editGenderDropDown"><option value="Male">Male</option><option value="Female">Female</option></select>';
+			if(currentSelect === "Male"){
+				$('#' + rowId + ' #editGenderDropDown').prop('selectedIndex', 0);
+			}
+			else{
+				$('#' + rowId + ' #editGenderDropDown').prop('selectedIndex', 1);
+			}
+		}
+		else if(value.className === 'delete'){
+
+		}
+		else if(value.className === 'edit'){
+			this.innerHTML = '<a href="#" id="editUpdate">Update</a>/<a href="#" id="editCancel">Cancel</a>'
+		}
+		else{
+			this.innerHTML = '<input type="text" id="edit' + value.className + '" value="'+this.innerText+'"></input>';
+		}
+	});
+});
+
+$body.on('click', 'editUpdate', function(){
+	var updateObj = {};
+	updateObj['fullname'] = $(this).parent().attr('#fullname').val();
+});
 
 $('#signinTextBox').autocomplete({
-	source: function(request, response){
-	}
 });
