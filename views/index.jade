@@ -34,24 +34,29 @@ block content
 				.modal-body
 					form.row(role='form')
 						.form-group
-							label(for='inputUsername') Username 
-								input#input-Username.form-control(type='text', placeholder='Username')
+							label(for='inputFirstName') First Name 
+								input#input-firstName.form-control(type='text', placeholder='First Name')
+							label(for='inputLastName') Last Name
+								input#input-lastName.form-control(type='text', placeholder='Last Name')
 						.form-group
-							label(for='inputFullName') FullName 
-								input#input-FullName.form-control(type='text', placeholder='Full Name')
-						.form-group
-							label(for='inputEmail') Email
-								input#input-Email.form-control(type='email', placeholder='Email')
-						.form-group
-							label(for='inputAge') Age
-								input#input-Age.form-control(type='age', placeholder='Age')
-						.form-group
-							label(for='inputLocation') Location
-								input#input-Location.form-control(type='location', placeholder='Location')
+							label(for='inputAddress') Address (Street, City, State)
+								input#input-address.form-control(type='text', placeholder='Address (Street, City, State)')
+							label(for='inputZip') Zip Code
+								input#input-zip.form-control(type='text', placeholder='Zip Code')
 						.form-group
 							label(for='inputGender') Gender
 								select#input-Gender.form-control
 									option(value="Male") Male
 									option(value="Female") Female
+							label(for='inputDateOfBirth') Date Of Birth
+								input#input-dateOfBirth.form-control(type='text', placeholder='Date Of Birth')
+						.form-group
+							label(for='inputSchool') School
+								input#input-school.form-control(type='text', placeholder='School')
+						.form-group
+							label(for='inputParentName') Parent Name
+								input#input-parentName.form-control(type='text', placeholder='Parent Name')
+							label(for='inputParentPhone') Parent Phone
+								input#input-parentPhone.form-control(type='text', placeholder='Parent Phone')
 						button#formAddUserBtn.btn.btn-primary(type="button") Save Changes
 						button.btn.btn-default(type="button", data-dismiss="modal") Close
