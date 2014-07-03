@@ -163,7 +163,7 @@ mySignin.populateTable();
 $body.on('click', '#signinBtn', function(){
 	mySignin.signin($('#signinTextBox').val());
 });
-$body.on('click', '#btnAddUser', mySignin.addUser);
+$body.on('click', '#formAddUserBtn', mySignin.addUser);
 $body.on('click', 'td a.linkshowuser', mySignin.showUserInfo);
 $body.on('click', 'td a.linkdeleteuser', mySignin.deleteUser);
 $('#contentTab').tab();

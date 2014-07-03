@@ -32,39 +32,26 @@ block content
 						span.sr-only Close
 					h4#addUserModalLabel.modal-title Add User
 				.modal-body
-					#addUser
-					form.form-horizontal(role='form')
+					form.row(role='form')
 						.form-group
-							label.col-sm-2.control-label(for='inputUsername3') Username 
-							.col-sm-10
-								input#inputUsername3.form-control(type='text', placeholder='Username')
+							label(for='inputUsername') Username 
+								input#input-Username.form-control(type='text', placeholder='Username')
 						.form-group
-							label.col-sm-2.control-label(for='inputFullName3') FullName 
-							.col-sm-10
-								input#inputFullName3.form-control(type='text', placeholder='Full Name')
+							label(for='inputFullName') FullName 
+								input#input-FullName.form-control(type='text', placeholder='Full Name')
 						.form-group
-							label.col-sm-2.control-label(for='inputEmail3') Email
-							.col-sm-10
-								input#inputEmail3.form-control(type='email', placeholder='Email')
+							label(for='inputEmail') Email
+								input#input-Email.form-control(type='email', placeholder='Email')
 						.form-group
-							label.col-sm-2.control-label(for='inputAge3') Age
-							.col-sm-10
-								input#inputAge3.form-control(type='age', placeholder='Age')
+							label(for='inputAge') Age
+								input#input-Age.form-control(type='age', placeholder='Age')
 						.form-group
-							label.col-sm-2.control-label(for='inputLocation3') Location
-							.col-sm-10
-								input#inputLocation3.form-control(type='location', placeholder='Location')
+							label(for='inputLocation') Location
+								input#input-Location.form-control(type='location', placeholder='Location')
 						.form-group
-							label.col-sm-2.control-label(for='inputGender3') Gender
-							.col-sm-10
-								.dropdown
-									button.btn.btn-default#dLabel(role="button", data-toggle="dropdown", data-target="#") Gender 
-										span.caret
-									ul.dropdown-menu(role="menu")
-										li(role="presentation")
-											a(role="menuitem", tabindex="-1") Male
-										li(role="presentation")
-											a(role="menuitem", tabindex="-1") Female
-				.modal-footer
-					button.btn.btn-default(type="button", data-dismiss="modal") Close
-					button.btn.btn-primary(type="button") Save Changes
+							label(for='inputGender') Gender
+								select#input-Gender.form-control
+									option(value="Male") Male
+									option(value="Female") Female
+						button#formAddUserBtn.btn.btn-primary(type="button") Save Changes
+						button.btn.btn-default(type="button", data-dismiss="modal") Close
