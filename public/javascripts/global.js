@@ -1,22 +1,28 @@
 var SigninModel = function () {
 	var self = this,
-		userListData = [],
+		user = {},
 		userPropertyList = [
-			'username',
-			'email',
-			'fullname',
-			'age',
-			'location',
-			'gender'
+			'firstname',
+			'lastname',
+			'street',
+			'city',
+			'state',
+			'zip',
+			'dateOfBirth',
+			'gender',
+			'school'
 		],
 		grid,
 		columns = [
-			{id: "username", name: "Username", field: "username"},
-			{id: "fullname", name: "Full Name", field: "fullname"},
-			{id: "email", name: "Email", field: "email"},
-			{id: "age", name: "Age", field: "age"},
-			{id: "location", name: "Location", field: "location"},
-			{id: "gender", name: "Gender", field: "gender"}
+			{id: "firstname", name: "First Name", field: "firstname", minWidth: 50},
+			{id: "lastname", name: "Last Name", field: "lastname"},
+			{id: "street", name: "Street", field: "street"},
+			{id: "city", name: "City", field: "city"},
+			{id: "state", name: "State", field: "state"},
+			{id: "zip", name: "Zip", field: "zip"},
+			{id: "dateOfBirth", name: "Date Of Birth", field: "dateOfBirth"},
+			{id: "gender", name: "Gender", field: "gender"},
+			{id: "school", name: "School", field: "school"}
 		],
 		options = {
 			enableCellNavigation: true,
@@ -51,7 +57,6 @@ var SigninModel = function () {
 			userListData = data;
 
 			grid = new Slick.Grid('#myGrid', data, columns, options);
-			grid.autoSizeColumns();
 		});
 	};
 
@@ -77,7 +82,7 @@ var SigninModel = function () {
 
 		if(errorCount === 0) {
 
-			var newUser = self.setUserObjectToForm();
+			var newUser = self.getUserObjectFromForm();
 
 			console.log('New User:', newUser);
 
@@ -88,8 +93,7 @@ var SigninModel = function () {
 				dataType: 'JSON'
 			}).done(function( response ) {
 				if (response.msg === '') {
-					$('').val('');
-					self.populateTable();
+
 				}
 				else {
 					alert('Error: ' + response.msg);
@@ -160,12 +164,11 @@ var $body = $(document.body),
 	mySignin = new SigninModel();
 
 mySignin.populateTable();
+
 $body.on('click', '#signinBtn', function(){
 	mySignin.signin($('#signinTextBox').val());
 });
 $body.on('click', '#formAddUserBtn', mySignin.addUser);
-$body.on('click', 'td a.linkshowuser', mySignin.showUserInfo);
-$body.on('click', 'td a.linkdeleteuser', mySignin.deleteUser);
 $('#contentTab').tab();
 $body.on('click', '#contentTab a', function(e){
 	e.preventDefault();
@@ -173,35 +176,10 @@ $body.on('click', '#contentTab a', function(e){
 	$('.tab-content div.tab-pane').removeClass('active');
 	$(this).addClass('active');
 });
-$body.on('click', '.linkedituser', function(){
-	$(this).parent().parent().children('td').each(function(index, value){
-		var rowId = $(this.parentElement).attr('id');
-		if(value.className === 'gender'){
-			var currentSelect = value.innerText;
-			this.innerHTML = '<select id="editGenderDropDown"><option value="Male">Male</option><option value="Female">Female</option></select>';
-			if(currentSelect === "Male"){
-				$('#' + rowId + ' #editGenderDropDown').prop('selectedIndex', 0);
-			}
-			else{
-				$('#' + rowId + ' #editGenderDropDown').prop('selectedIndex', 1);
-			}
-		}
-		else if(value.className === 'delete'){
 
-		}
-		else if(value.className === 'edit'){
-			this.innerHTML = '<a href="#" id="editUpdate">Update</a>/<a href="#" id="editCancel">Cancel</a>'
-		}
-		else{
-			this.innerHTML = '<input type="text" id="edit' + value.className + '" value="'+this.innerText+'"></input>';
-		}
-	});
+$('#input-dateOfBirth').mask('**/**/****');
+
+$('#input-dateOfBirth').datepicker({
+	autoclose: true
 });
 
-$body.on('click', 'editUpdate', function(){
-	var updateObj = {};
-	updateObj['fullname'] = $(this).parent().attr('#fullname').val();
-});
-
-$('#signinTextBox').autocomplete({
-});

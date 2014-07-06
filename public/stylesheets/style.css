@@ -68,6 +68,22 @@ fieldset {
 			box-sizing: content-box;
 }
 
-form button input label{
+form button {
 	margin: 0 2px;
+}
+.fullWidth {
+	width: 100%;
+}
+
+form label {
+	margin: 0 2px;
+}
+
+#myGrid {
+	width: 800px;
+	height: auto;
+}
+
+.datepicker{
+	z-index: 1151 !important;
 }
