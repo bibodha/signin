@@ -72,7 +72,7 @@ var SigninModel = function () {
         $('#userInfoLocation').text(thisUserObject.location);
     };
 
-    self.addUser = function (event) {
+    self.addUser = function (event, callback) {
         event.preventDefault();
 
         var errorCount = 0;
@@ -91,10 +91,8 @@ var SigninModel = function () {
                 data: newUser,
                 url: '/users/adduser',
                 dataType: 'JSON'
-            }).done(function( response ) {
-                if (response.msg !== '') {
-                    alert('Error: ' + response.msg);
-                }
+            }).done(function(response) {
+                callback();
             });
         }
         else {
@@ -165,7 +163,11 @@ mySignin.populateTable();
 $body.on('click', '#signinBtn', function(){
     mySignin.signin($('#signinTextBox').val());
 });
-$body.on('click', '#formAddUserBtn', mySignin.addUser);
+$body.on('click', '#formAddUserBtn', function(event){
+    mySignin.addUser(event, function(){
+        $('#addUserModal').modal('hide');
+    });
+});
 $('#contentTab').tab();
 $body.on('click', '#contentTab a', function(e){
     e.preventDefault();

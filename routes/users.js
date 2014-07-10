@@ -11,9 +11,11 @@ router.get('/userlist', function(req, res){
 router.post('/adduser', function(req, res){
     var db = req.db;
     db.collection('userlist').insert(req.body, function(err, result){
-        res.send(
-            (err === null) ? {msg: ''} : {msg: err}
-        );
+        if(err === null){
+            res.send(200, '{"success" : "User Added Successfully"}');
+        }else{
+            res.send({msg: err});
+        }
     });
 });
 
