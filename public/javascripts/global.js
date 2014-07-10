@@ -160,7 +160,8 @@ var $body = $(document.body),
 
 mySignin.populateTable();
 
-$body.on('click', '#signinBtn', function(){
+$body.on('submit', '#signinForm', function(event){
+    event.preventDefault();
     mySignin.signin($('#signinTextBox').val());
 });
 $body.on('click', '#formAddUserBtn', function(event){

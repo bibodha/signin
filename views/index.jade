@@ -10,10 +10,11 @@ block content
     div.tab-content
         div.tab-pane.active#signin
             h1='Signin'
-            div.input-group.input-group-lg.signinArea
-                input.form-control#signinTextBox(type='text', placeholder='Name')
-                span.input-group-btn
-                    button.btn.btn-default#signinBtn(type='button') Signin
+            form#signinForm
+                div.input-group.input-group-lg.signinArea
+                    input.form-control#signinTextBox(type='text', placeholder='Name')
+                    span.input-group-btn
+                        input.btn.btn-default#signinBtn(type='submit', value="Signin")
 
         div.tab-pane#manage
             h1= 'User Management'

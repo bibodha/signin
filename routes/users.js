@@ -45,16 +45,21 @@ router.post('/signin/:name', function(req, res){
 
     db.collection('userlist').findOne({username: name}, function(err, result){
         user = result;
-        db.collection('signin').insert({id: user._id, signinTime: date.toLocaleString()}, function(err, result){
-            if(err){
-                res.send('There was an error: ' + err);
-            }
-            else{
-                res.location("");
-                res.redirect("/");
-                res.send({msg: ''});
-            }
-        });
+        if(err){
+            res.send(404, '{"status": "Not found"}');
+        }
+        if(user){
+            db.collection('signin').insert({id: user._id, signinTime: date.toLocaleString()}, function(err, result){
+                if(err){
+                    res.send('There was an error: ' + err);
+                }
+                else{
+                    res.send({msg: ''});
+                }
+            });
+        } else {
+            res.send(404, '{"status": "Not found"}');
+        }
     });
 });
 
