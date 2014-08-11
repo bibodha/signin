@@ -83,9 +83,23 @@ var SigninModel = function () {
         if(errorCount === 0) {
 
             var newUser = self.getUserObjectFromForm();
+            newUser.username = newUser.firstname + ' ' + newUser.lastname;
 
             console.log('New User:', newUser);
 
+            //find the person with the username
+            $.ajax({
+                type: 'POST',
+                data: newUser.username,
+                url: '/users/checkusername',
+                dataType: 'JSON',
+            }).done(function(response){
+                console.log(response);
+            });
+
+            //fix it if needed to be fixed
+
+            //then add it to the db
             $.ajax({
                 type: 'POST',
                 data: newUser,

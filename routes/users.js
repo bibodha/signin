@@ -10,6 +10,7 @@ router.get('/userlist', function(req, res){
 
 router.post('/adduser', function(req, res){
     var db = req.db;
+
     db.collection('userlist').insert(req.body, function(err, result){
         if(err === null){
             res.send(200, '{"success" : "User Added Successfully"}');
@@ -33,6 +34,15 @@ router.post('/getuser/:id', function(req, res){
         user = '';
 
     db.collection('userlist').findById(userToFetch, function(err, result){
+        res.send((err === null) ? {err : null, msg: result} : {err : 1, msg: 'error: ' + err});
+    });
+});
+
+router.post('/checkusername/:username', function(req, res){
+    var db = req.db,
+        userToFetch = req.params.username;
+
+    db.collection('userlist').find({username: userToFetch}, function(err, result){
         res.send((err === null) ? {err : null, msg: result} : {err : 1, msg: 'error: ' + err});
     });
 });
