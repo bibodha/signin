@@ -38,12 +38,12 @@ router.post('/getuser/:id', function(req, res){
     });
 });
 
-router.post('/checkusername/:username', function(req, res){
+router.post('/checkuser', function(req, res){
     var db = req.db,
-        userToFetch = req.params.username;
+        userToFetch = req.body;
 
-    db.collection('userlist').find({username: userToFetch}, function(err, result){
-        res.send((err === null) ? {err : null, msg: result} : {err : 1, msg: 'error: ' + err});
+    db.collection('userlist').find({firstname: userToFetch.firstname, lastname: userToFetch.lastname}).toArray(function(err, items){
+        res.json(items);
     });
 });
 

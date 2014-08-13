@@ -4,6 +4,7 @@ var SigninModel = function () {
         userPropertyList = [
             'firstname',
             'lastname',
+            'username',
             'street',
             'city',
             'state',
@@ -16,6 +17,7 @@ var SigninModel = function () {
         columns = [
             {id: "firstname", name: "First Name", field: "firstname", minWidth: 50},
             {id: "lastname", name: "Last Name", field: "lastname"},
+            {id: "username", name: "User Name", field: "username"},
             {id: "street", name: "Street", field: "street"},
             {id: "city", name: "City", field: "city"},
             {id: "state", name: "State", field: "state"},
@@ -90,14 +92,24 @@ var SigninModel = function () {
             //find the person with the username
             $.ajax({
                 type: 'POST',
-                data: newUser.username,
-                url: '/users/checkusername',
+                data: newUser,
+                url: '/users/checkuser',
                 dataType: 'JSON',
-            }).done(function(response){
-                console.log(response);
+                async: false
+            }).done(function(items){
+                var length = items.length; 
+                if(length > 0){
+                    var lastUsername = items[length - 1].username;
+                    var num = parseInt(lastUsername.split(' ')[2]);
+                    if(num.toString() === "NaN"){
+                        num = 1;
+                    }
+                    else{
+                        num++;
+                    }
+                    newUser.username += ' ' + num;
+                }
             });
-
-            //fix it if needed to be fixed
 
             //then add it to the db
             $.ajax({
