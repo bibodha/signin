@@ -12,8 +12,7 @@ router.post('/adduser', function(req, res){
     var db = req.db;
 
     var newUser = req.body;
-    newUser.username = newUser.firstname + ' ' + newUser.lastname;
-
+    newUser.username = (newUser.firstname + ' ' + newUser.lastname).toLowerCase();
 
     db.collection('userlist').find({firstname: newUser.firstname, lastname: newUser.lastname}).toArray(function(err, items){
         var length = items.length; 
@@ -27,14 +26,14 @@ router.post('/adduser', function(req, res){
                 num++;
             }
             newUser.username += ' ' + num;
-            db.collection('userlist').insert(req.body, function(err, result){
-                if(err === null){
-                    res.send(200, 'User ' + newUser.username + ' added successfully');
-                }else{
-                    res.send({msg: err});
-                }
-            });
         }
+        db.collection('userlist').insert(req.body, function(err, result){
+            if(err === null){
+                res.send(200, 'User ' + newUser.username + ' added successfully');
+            }else{
+                res.send({msg: err});
+            }
+        });
     });
 });
 
@@ -56,24 +55,19 @@ router.post('/getuser/:id', function(req, res){
     });
 });
 
-router.post('/checkuser', function(req, res){
-    var db = req.db,
-        userToFetch = req.body;
-});
-
 router.post('/signin/:name', function(req, res){
     var db = req.db,
     date = new Date,
-    name = req.params.name,
+    name = req.params.name.toLowerCase(),
     user;
 
     db.collection('userlist').findOne({username: name}, function(err, result){
         user = result;
         if(err){
-            res.send(404, '{"status": "Not found"}');
+            res.send(404, 'User not found');
         }
         if(user){
-            db.collection('signin').insert({id: user._id, signinTime: date.toLocaleString()}, function(err, result){
+            db.collection('signin').insert({userId: user._id, signinTime: date.toLocaleString()}, function(err, result){
                 if(err){
                     res.send('There was an error: ' + err);
                 }
@@ -82,7 +76,7 @@ router.post('/signin/:name', function(req, res){
                 }
             });
         } else {
-            res.send(404, '{"status": "Not found"}');
+            res.send(404, 'User not found');
         }
     });
 });

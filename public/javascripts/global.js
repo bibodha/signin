@@ -148,8 +148,11 @@ var SigninModel = function () {
                 alert(res.err);
             }
             else{
+                alert('welcome ' + name);
                 $('#signinTextBox').val('');
             }
+        }).fail(function(res){
+            alert(res.responseText);
         });
     };
 };
@@ -178,7 +181,6 @@ $body.on('click', '#contentTab a', function(e){
 
 $('#input-dateOfBirth').mask('**/**/****');
 
-$('#input-dateOfBirth').datepicker({
-    autoclose: true
-});
+$('#input-dateOfBirth').datepicker();
+$('#input-zip').numeric();
 
