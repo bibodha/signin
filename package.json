@@ -18,6 +18,5 @@
   },
   "devDependencies": {
     "jquery.event.drag": "^2.2.2",
-    "slickgrid": "^2.1.0-1"
   }
 }
