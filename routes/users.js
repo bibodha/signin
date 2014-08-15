@@ -11,11 +11,29 @@ router.get('/userlist', function(req, res){
 router.post('/adduser', function(req, res){
     var db = req.db;
 
-    db.collection('userlist').insert(req.body, function(err, result){
-        if(err === null){
-            res.send(200, '{"success" : "User Added Successfully"}');
-        }else{
-            res.send({msg: err});
+    var newUser = req.body;
+    newUser.username = newUser.firstname + ' ' + newUser.lastname;
+
+
+    db.collection('userlist').find({firstname: newUser.firstname, lastname: newUser.lastname}).toArray(function(err, items){
+        var length = items.length; 
+        if(length > 0){
+            var lastUsername = items[length - 1].username;
+            var num = parseInt(lastUsername.split(' ')[2]);
+            if(num.toString() === "NaN"){
+                num = 1;
+            }
+            else{
+                num++;
+            }
+            newUser.username += ' ' + num;
+            db.collection('userlist').insert(req.body, function(err, result){
+                if(err === null){
+                    res.send(200, '{"success" : "User "' + newUser.username + '"added successfully"}');
+                }else{
+                    res.send({msg: err});
+                }
+            });
         }
     });
 });
@@ -41,10 +59,6 @@ router.post('/getuser/:id', function(req, res){
 router.post('/checkuser', function(req, res){
     var db = req.db,
         userToFetch = req.body;
-
-    db.collection('userlist').find({firstname: userToFetch.firstname, lastname: userToFetch.lastname}).toArray(function(err, items){
-        res.json(items);
-    });
 });
 
 router.post('/signin/:name', function(req, res){

@@ -85,38 +85,10 @@ var SigninModel = function () {
         if(errorCount === 0) {
 
             var newUser = self.getUserObjectFromForm();
-            newUser.username = newUser.firstname + ' ' + newUser.lastname;
-
-            console.log('New User:', newUser);
-
-            //find the person with the username
             $.ajax({
                 type: 'POST',
                 data: newUser,
-                url: '/users/checkuser',
-                dataType: 'JSON',
-                async: false
-            }).done(function(items){
-                var length = items.length; 
-                if(length > 0){
-                    var lastUsername = items[length - 1].username;
-                    var num = parseInt(lastUsername.split(' ')[2]);
-                    if(num.toString() === "NaN"){
-                        num = 1;
-                    }
-                    else{
-                        num++;
-                    }
-                    newUser.username += ' ' + num;
-                }
-            });
-
-            //then add it to the db
-            $.ajax({
-                type: 'POST',
-                data: newUser,
-                url: '/users/adduser',
-                dataType: 'JSON'
+                url: '/users/adduser'
             }).done(function(response) {
                 callback();
             });
