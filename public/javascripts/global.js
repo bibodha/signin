@@ -91,6 +91,7 @@ var SigninModel = function () {
                 url: '/users/adduser'
             }).done(function(response) {
                 callback();
+                alert(response);
             });
         }
         else {

@@ -29,7 +29,7 @@ router.post('/adduser', function(req, res){
             newUser.username += ' ' + num;
             db.collection('userlist').insert(req.body, function(err, result){
                 if(err === null){
-                    res.send(200, '{"success" : "User "' + newUser.username + '"added successfully"}');
+                    res.send(200, 'User ' + newUser.username + ' added successfully');
                 }else{
                     res.send({msg: err});
                 }
