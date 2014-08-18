@@ -26,7 +26,7 @@ var SigninModel = function () {
             {id: "dateOfBirth", name: "DOB", field: "dateOfBirth", minWidth:87},
             {id: "gender", name: "Gender", field: "gender", maxWidth:62},
             {id: "school", name: "School", field: "school", minWidth: 100},
-            {id: "edit", name: "", field: "edit", minWidth:100, 
+            {id: "edit", name: "Action", field: "edit", minWidth:100, 
                 formatter: function(row, cell, value, columnDef, dataContext){ 
                                return '<a href="#" id="edit-user" data-id="' + dataContext['_id'] + '">Edit</a>/'+ 
                                       '<a href="#" id="delete-user" data-id="' + dataContext['_id'] + '">Delete</a>';
@@ -58,9 +58,9 @@ var SigninModel = function () {
         });
         return output;
     };
-    self.setUserObjectToForm = function(user){
+    self.setUserObjectToForm = function(type, user){
         userPropertyList.forEach(function(fieldName){
-            $('#input-' + fieldName).val(user[fieldName]);
+            $('#' + type + '-input-' + fieldName).val(user[fieldName]);
         });
     };
 
@@ -149,9 +149,8 @@ var SigninModel = function () {
     self.populateEdit = function(){
         var selectedRow = grid.getSelectedRows(),
             user = grid.getDataItem(selectedRow);
-        self.setUserObjectToForm(user);
-        $('.modal-title').text('Edit User');
-        $('#addUserModal').modal('show');
+        self.setUserObjectToForm('edit', user);
+        $('#editUserModal').modal('show');
     };
 
     self.editUser = function(event){

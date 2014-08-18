@@ -37,29 +37,66 @@ block content
                 .modal-body
                     form(role='form')
                         .form-group
-                            label.fullWidth(for='input-firstname') First Name
-                                input#input-firstname.form-control(type='text')
+                            label.fullWidth(for='add-input-firstname') First Name
+                                input#add-input-firstname.form-control(type='text')
                         .form-group
-                            label.fullWidth(for='input-lastname') Last Name
-                                input#input-lastname.form-control(type='text')
+                            label.fullWidth(for='add-input-lastname') Last Name
+                                input#add-input-lastname.form-control(type='text')
                         .form-group
-                            label.fullWidth(for='input-street') Street
-                                input#input-street.form-control(type='text')
+                            label.fullWidth(for='add-input-street') Street
+                                input#add-input-street.form-control(type='text')
                         .form-group
-                            label(for='input-city') City
-                                input#input-city.form-control(type='text')
-                            label(for='input-state') State
-                                input#input-state.form-control(type='text', size='2', maxlength='2')
-                            label(for='input-zip') Zip Code
-                                input#input-zip.form-control(type='text', size='5', maxlength='5')
+                            label(for='add-input-city') City
+                                input#add-input-city.form-control(type='text')
+                            label(for='add-input-state') State
+                                input#add-input-state.form-control(type='text', size='2', maxlength='2')
+                            label(for='add-input-zip') Zip Code
+                                input#add-input-zip.form-control(type='text', size='5', maxlength='5')
                         .form-group
-                            label(for='input-gender') Gender
-                                select#input-gender.form-control
+                            label(for='add-input-gender') Gender
+                                select#add-input-gender.form-control
                                     option(value='Male') Male
                                     option(value='Female') Female
-                            label(for='input-dateOfBirth') Date Of Birth
-                                input#input-dateOfBirth.form-control(type='text')
-                            label(for='input-school') School
-                                input#input-school.form-control(type='text')
+                            label(for='add-input-dateOfBirth') Date Of Birth
+                                input#add-input-dateOfBirth.form-control(type='text')
+                            label(for='add-input-school') School
+                                input#add-input-school.form-control(type='text')
                         button#formAddUserBtn.btn.btn-primary(type="button") Save Changes
+                        button.btn.btn-default(type="button", data-dismiss="modal") Close
+    //EDIT USER
+    #editUserModal.modal.fade(role='dialog')
+        .modal-dialog
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal')
+                        span.sr-only Close
+                    h4#editUserModalLabel.modal-title Edit User
+                .modal-body
+                    form(role='form')
+                        .form-group
+                            label.fullWidth(for='edit-input-firstname') First Name
+                                input#edit-input-firstname.form-control(type='text')
+                        .form-group
+                            label.fullWidth(for='edit-input-lastname') Last Name
+                                input#edit-input-lastname.form-control(type='text')
+                        .form-group
+                            label.fullWidth(for='edit-input-street') Street
+                                input#edit-input-street.form-control(type='text')
+                        .form-group
+                            label(for='edit-input-city') City
+                                input#edit-input-city.form-control(type='text')
+                            label(for='edit-input-state') State
+                                input#edit-input-state.form-control(type='text', size='2', maxlength='2')
+                            label(for='edit-input-zip') Zip Code
+                                input#edit-input-zip.form-control(type='text', size='5', maxlength='5')
+                        .form-group
+                            label(for='edit-input-gender') Gender
+                                select#edit-input-gender.form-control
+                                    option(value='Male') Male
+                                    option(value='Female') Female
+                            label(for='edit-input-dateOfBirth') Date Of Birth
+                                input#edit-input-dateOfBirth.form-control(type='text')
+                            label(for='edit-input-school') School
+                                input#edit-input-school.form-control(type='text')
+                        button#formEditUserBtn.btn.btn-primary(type="button") Save Changes
                         button.btn.btn-default(type="button", data-dismiss="modal") Close
