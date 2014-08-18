@@ -17,6 +17,6 @@
     "mongoskin": "*"
   },
   "devDependencies": {
-    "jquery.event.drag": "^2.2.2",
+    "jquery.event.drag": "^2.2.2"
   }
 }
