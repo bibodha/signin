@@ -3,6 +3,7 @@ var SigninModel = function () {
         user = {},
         dataView = new Slick.Data.DataView(),
         userPropertyList = [
+            '_id',
             'firstname',
             'lastname',
             'username',
@@ -51,10 +52,10 @@ var SigninModel = function () {
             grid.render();
         });
 
-    self.getUserObjectFromForm = function(){
+    self.getUserObjectFromForm = function(type){
         var output = {};
         userPropertyList.forEach(function(fieldName){
-            output[fieldName] = $('#input-' + fieldName).val();
+            output[fieldName] = $('#' + type + '-input-' + fieldName).val();
         });
         return output;
     };
@@ -110,7 +111,7 @@ var SigninModel = function () {
 
         if(errorCount === 0) {
 
-            var newUser = self.getUserObjectFromForm();
+            var newUser = self.getUserObjectFromForm('add');
             $.ajax({
                 type: 'POST',
                 data: newUser,
@@ -150,15 +151,17 @@ var SigninModel = function () {
         var selectedRow = grid.getSelectedRows(),
             user = grid.getDataItem(selectedRow);
         self.setUserObjectToForm('edit', user);
+        $('#edit-input-id').val(user._id);
         $('#editUserModal').modal('show');
     };
 
-    self.editUser = function(event){
-        event.preventDefault();
-        edit = true;
+    self.editUser = function(){
+        var edit = true;
+        var user = self.getUserObjectFromForm('edit');
         $.ajax({
             type: 'POST',
-            url: '/users/getuser/' + $(this).attr('rel')
+            url: '/users/edituser/',
+            data: user
         }).done(function(res){
             if(res.err === null){
                 var user = res.msg;
@@ -220,13 +223,21 @@ $body.on('click', '#edit-user', function(e){
     mySignin.populateEdit();
 });
 
+$body.on('click', '#formEditUserBtn', function(e){
+    e.preventDefault();
+    mySignin.editUser();
+});
+
 $body.on('click', '#delete-user', function(e){
     e.preventDefault();
     mySignin.deleteUser($(this).data('id'));
 });
 
 //beautification
-$('#input-dateOfBirth').mask('**/**/****');
-$('#input-dateOfBirth').datepicker();
-$('#input-zip').numeric();
+$('#add-input-dateOfBirth').mask('**/**/****');
+$('#edit-input-dateOfBirth').mask('**/**/****');
+$('#add-input-dateOfBirth').datepicker();
+$('#edit-input-dateOfBirth').datepicker();
+$('#add-input-zip').numeric();
+$('#edit-input-zip').numeric();
 
