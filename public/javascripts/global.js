@@ -14,7 +14,6 @@ var SigninModel = function () {
             'dateOfBirth',
             'gender',
             'school',
-            'edit'
         ],
         columns = [
             {id: "firstname", name: "First Name", field: "firstname", minWidth: 100},
@@ -81,24 +80,8 @@ var SigninModel = function () {
     self.populateTable = function () {
         var tableContent = '';
         $.getJSON( '/users/userlist', function( data ) {
-            data.forEach(function(item){
-                item.edit='Edit/Delete';
-            });
-            userListData = data;
             dataView.setItems(data, '_id');
         });
-    };
-
-    self.showUserInfo = function (event) {
-        event.preventDefault();
-        var thisUserName = $(this).attr('rel'),
-        arrayPosition = userListData.map(function(arrayItem) { return arrayItem.username; }).indexOf(thisUserName),
-        thisUserObject = userListData[arrayPosition];
-
-        $('#userInfoName').text(thisUserObject.fullname);
-        $('#userInfoAge').text(thisUserObject.age);
-        $('#userInfoGender').text(thisUserObject.gender);
-        $('#userInfoLocation').text(thisUserObject.location);
     };
 
     self.addUser = function (event, callback) {
@@ -155,9 +138,11 @@ var SigninModel = function () {
         $('#editUserModal').modal('show');
     };
 
-    self.editUser = function(){
-        var edit = true;
-        var user = self.getUserObjectFromForm('edit');
+    self.editUser = function(callback){
+        var edit = true,
+            user = self.getUserObjectFromForm('edit');
+
+
         $.ajax({
             type: 'POST',
             url: '/users/edituser/',
@@ -166,6 +151,7 @@ var SigninModel = function () {
             if(res.err === null){
                 var user = res.msg;
                 self.setUserObjectToForm(user);
+                callback();
             }
             else{
                 alert('Error: ' + res.msg);
@@ -225,7 +211,9 @@ $body.on('click', '#edit-user', function(e){
 
 $body.on('click', '#formEditUserBtn', function(e){
     e.preventDefault();
-    mySignin.editUser();
+    mySignin.editUser(function(){
+        $('#editUserModal').modal('hide');
+    });
 });
 
 $body.on('click', '#delete-user', function(e){

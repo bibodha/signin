@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var ObjectId = require('mongodb').ObjectID;
 
 router.get('/userlist', function(req, res){
     var db = req.db;
@@ -52,10 +53,11 @@ router.delete('/deleteuser/:id', function(req, res){
 
 router.post('/edituser', function(req, res){
     var db = req.db,
-        user = req.params.user,
-        id = user.id;
-    delete user.id;
-    db.collection('userlist').update({_id: user.id}, user, function(err, result){
+        user = req.body,
+        id = new ObjectId(user._id);
+        //deleting id because mongo will also attempt to update it causing problems.
+        delete(user._id);
+    db.collection('userlist').update({_id: id}, {$set: user}, function(err, result){
         if(err === null){
             res.send(200, result);
         }
