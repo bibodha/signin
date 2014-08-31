@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var ObjectId = require('mongodb').ObjectID;
 
 router.get('/userlist', function(req, res){
     var db = req.db;
@@ -29,7 +30,7 @@ router.post('/adduser', function(req, res){
         }
         db.collection('userlist').insert(req.body, function(err, result){
             if(err === null){
-                res.send(200, 'User ' + newUser.username + ' added successfully');
+                res.send(200, result);
             }else{
                 res.send({msg: err});
             }
@@ -41,7 +42,28 @@ router.delete('/deleteuser/:id', function(req, res){
     var db = req.db;
     var userToDelete = req.params.id;
     db.collection('userlist').removeById(userToDelete, function(err, result){
-        res.send((result === 1) ? {msg: ''} : {msg: 'error: ' + err});
+        if(err === null){
+            res.send(200, result);
+        }
+        else{
+            res.send(err);
+        }
+    });
+});
+
+router.post('/edituser', function(req, res){
+    var db = req.db,
+        user = req.body,
+        id = new ObjectId(user._id);
+        //deleting id because mongo will also attempt to update it causing problems.
+        delete(user._id);
+    db.collection('userlist').update({_id: id}, {$set: user}, function(err, result){
+        if(err === null){
+            res.send(200, result);
+        }
+        else{
+            res.send({msg: err});
+        }
     });
 });
 
@@ -51,7 +73,12 @@ router.post('/getuser/:id', function(req, res){
         user = '';
 
     db.collection('userlist').findById(userToFetch, function(err, result){
-        res.send((err === null) ? {err : null, msg: result} : {err : 1, msg: 'error: ' + err});
+        if(err === null){
+            res.send(200, result);
+        }
+        else{
+            res.send(err);
+        }
     });
 });
 
@@ -68,11 +95,11 @@ router.post('/signin/:name', function(req, res){
         }
         if(user){
             db.collection('signin').insert({userId: user._id, signinTime: date.toLocaleString()}, function(err, result){
-                if(err){
-                    res.send('There was an error: ' + err);
+                if(err === null){
+                    res.send(200, result);
                 }
                 else{
-                    res.send({msg: ''});
+                    res.send('There was an error: ' + err);
                 }
             });
         } else {

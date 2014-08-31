@@ -1,7 +1,9 @@
 var SigninModel = function () {
     var self = this,
         user = {},
+        dataView = new Slick.Data.DataView(),
         userPropertyList = [
+            '_id',
             'firstname',
             'lastname',
             'username',
@@ -11,36 +13,54 @@ var SigninModel = function () {
             'zip',
             'dateOfBirth',
             'gender',
-            'school'
+            'school',
         ],
-        grid,
         columns = [
-            {id: "firstname", name: "First Name", field: "firstname", minWidth: 50},
-            {id: "lastname", name: "Last Name", field: "lastname"},
-            {id: "username", name: "User Name", field: "username"},
-            {id: "street", name: "Street", field: "street"},
-            {id: "city", name: "City", field: "city"},
-            {id: "state", name: "State", field: "state"},
-            {id: "zip", name: "Zip", field: "zip"},
-            {id: "dateOfBirth", name: "Date Of Birth", field: "dateOfBirth"},
-            {id: "gender", name: "Gender", field: "gender"},
-            {id: "school", name: "School", field: "school"}
+            {id: "firstname", name: "First Name", field: "firstname", minWidth: 100},
+            {id: "lastname", name: "Last Name", field: "lastname", minWidth: 100},
+            {id: "username", name: "User Name", field: "username", minWidth: 100},
+            {id: "street", name: "Street", field: "street", minWidth: 150},
+            {id: "city", name: "City", field: "city", minWidth: 100},
+            {id: "state", name: "State", field: "state", maxWidth: 50},
+            {id: "zip", name: "Zip", field: "zip", maxWidth: 50},
+            {id: "dateOfBirth", name: "DOB", field: "dateOfBirth", minWidth:87},
+            {id: "gender", name: "Gender", field: "gender", maxWidth:62},
+            {id: "school", name: "School", field: "school", minWidth: 100},
+            {id: "edit", name: "Action", field: "edit", minWidth:100, 
+                formatter: function(row, cell, value, columnDef, dataContext){ 
+                               return '<a href="#" id="edit-user" data-id="' + dataContext['_id'] + '">Edit</a>/'+ 
+                                      '<a href="#" id="delete-user" data-id="' + dataContext['_id'] + '">Delete</a>';
+                }
+            }
         ],
         options = {
             enableCellNavigation: true,
             enableColumnReorder: false,
-        };
+        },
+        grid = new Slick.Grid('#myGrid', dataView, columns, options);
 
-    self.getUserObjectFromForm = function(){
+        grid.setSelectionModel(new Slick.RowSelectionModel());
+
+        dataView.onRowCountChanged.subscribe(function(e, args){
+            grid.updateRowCount();
+            grid.render();
+        });
+
+        dataView.onRowsChanged.subscribe(function(e, args){
+            grid.invalidateRows(args.rows);
+            grid.render();
+        });
+
+    self.getUserObjectFromForm = function(type){
         var output = {};
         userPropertyList.forEach(function(fieldName){
-            output[fieldName] = $('#input-' + fieldName).val();
+            output[fieldName] = $('#' + type + '-input-' + fieldName).val();
         });
         return output;
     };
-    self.setUserObjectToForm = function(user){
+    self.setUserObjectToForm = function(type, user){
         userPropertyList.forEach(function(fieldName){
-            $('#input-' + fieldName).val(user[fieldName]);
+            $('#' + type + '-input-' + fieldName).val(user[fieldName]);
         });
     };
 
@@ -53,25 +73,15 @@ var SigninModel = function () {
         });
     };
 
+    var linkFormatter = function ( row, cell, value, columnDef, dataContext ) {
+        return '<a href="#' + dataContext['_id'] + '">' + value + '</a>';
+    };
+
     self.populateTable = function () {
         var tableContent = '';
         $.getJSON( '/users/userlist', function( data ) {
-            userListData = data;
-
-            grid = new Slick.Grid('#myGrid', data, columns, options);
+            dataView.setItems(data, '_id');
         });
-    };
-
-    self.showUserInfo = function (event) {
-        event.preventDefault();
-        var thisUserName = $(this).attr('rel'),
-        arrayPosition = userListData.map(function(arrayItem) { return arrayItem.username; }).indexOf(thisUserName),
-        thisUserObject = userListData[arrayPosition];
-
-        $('#userInfoName').text(thisUserObject.fullname);
-        $('#userInfoAge').text(thisUserObject.age);
-        $('#userInfoGender').text(thisUserObject.gender);
-        $('#userInfoLocation').text(thisUserObject.location);
     };
 
     self.addUser = function (event, callback) {
@@ -84,7 +94,7 @@ var SigninModel = function () {
 
         if(errorCount === 0) {
 
-            var newUser = self.getUserObjectFromForm();
+            var newUser = self.getUserObjectFromForm('add');
             $.ajax({
                 type: 'POST',
                 data: newUser,
@@ -100,21 +110,19 @@ var SigninModel = function () {
         }
     };
 
-    self.deleteUser = function (event) {
-        event.preventDefault();
+    self.deleteUser = function (id) {
         var confirmation = confirm('Are you sure you want to delete this user?');
 
         if (confirmation === true) {
             $.ajax({
                 type: 'DELETE',
-                url: '/users/deleteuser/' + $(this).attr('rel')
+                url: '/users/deleteuser/' + id
             }).done(function( response ) {
                 if (response.msg === '') {
                 }
                 else {
                     alert('Error: ' + response.msg);
                 }
-                self.populateTable();
             });
         }
         else {
@@ -122,20 +130,34 @@ var SigninModel = function () {
         }
     };
 
-    self.editUser = function(event){
-        event.preventDefault();
-        edit = true;
+    self.populateEdit = function(){
+        var selectedRow = grid.getSelectedRows(),
+            user = grid.getDataItem(selectedRow);
+        self.setUserObjectToForm('edit', user);
+        $('#edit-input-id').val(user._id);
+        $('#editUserModal').modal('show');
+    };
+
+    self.editUser = function(callback){
+        var edit = true,
+            user = self.getUserObjectFromForm('edit');
+
+
         $.ajax({
             type: 'POST',
-            url: '/users/getuser/' + $(this).attr('rel')
-        }).done(function(res){
+            url: '/users/edituser/',
+            data: user
+        }).done(function(){
             if(res.err === null){
                 var user = res.msg;
                 self.setUserObjectToForm(user);
+                callback();
             }
             else{
                 alert('Error: ' + res.msg);
             }
+        }).fail(function(stuff, error){
+            alert('fail');
         });
     };
 
@@ -156,6 +178,11 @@ var SigninModel = function () {
         });
     };
 };
+
+
+/*
+ * Do all the work here.
+ */
 
 var $body = $(document.body),
     mySignin = new SigninModel();
@@ -179,8 +206,28 @@ $body.on('click', '#contentTab a', function(e){
     $(this).addClass('active');
 });
 
-$('#input-dateOfBirth').mask('**/**/****');
+$body.on('click', '#edit-user', function(e){
+    e.preventDefault();
+    mySignin.populateEdit();
+});
 
-$('#input-dateOfBirth').datepicker();
-$('#input-zip').numeric();
+$body.on('click', '#formEditUserBtn', function(e){
+    e.preventDefault();
+    mySignin.editUser(function(){
+        $('#editUserModal').modal('hide');
+    });
+});
+
+$body.on('click', '#delete-user', function(e){
+    e.preventDefault();
+    mySignin.deleteUser($(this).data('id'));
+});
+
+//beautification
+$('#add-input-dateOfBirth').mask('**/**/****');
+$('#edit-input-dateOfBirth').mask('**/**/****');
+$('#add-input-dateOfBirth').datepicker();
+$('#edit-input-dateOfBirth').datepicker();
+$('#add-input-zip').numeric();
+$('#edit-input-zip').numeric();
 

@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "nodemon": "nodemon --debug ./bin/www",
+    "mongo": "mongod --dbpath data/db/",
+    "debug": "node-inspector"
   },
   "dependencies": {
     "express": "~4.2.0",
@@ -17,7 +20,6 @@
     "mongoskin": "*"
   },
   "devDependencies": {
-    "jquery.event.drag": "^2.2.2",
-    "slickgrid": "^2.1.0-1"
+    "jquery.event.drag": "^2.2.2"
   }
 }
