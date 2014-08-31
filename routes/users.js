@@ -62,7 +62,7 @@ router.post('/edituser', function(req, res){
             res.send(200, result);
         }
         else{
-            res.send(err);
+            res.send({msg: err});
         }
     });
 });

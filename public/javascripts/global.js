@@ -147,7 +147,7 @@ var SigninModel = function () {
             type: 'POST',
             url: '/users/edituser/',
             data: user
-        }).done(function(res){
+        }).done(function(){
             if(res.err === null){
                 var user = res.msg;
                 self.setUserObjectToForm(user);
@@ -156,6 +156,8 @@ var SigninModel = function () {
             else{
                 alert('Error: ' + res.msg);
             }
+        }).fail(function(stuff, error){
+            alert('fail');
         });
     };
 
