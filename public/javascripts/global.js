@@ -101,11 +101,11 @@ var SigninModel = function () {
                 url: '/users/adduser'
             }).done(function(response) {
                 callback();
-                new Toast('success', 'toast-top-full-width', 'User added successfully');
+                toastr.success('User added successfully');
             });
         }
         else {
-            new Toast('error', 'toast-top-full-width', 'Please fill in all fields');
+            toast.error('Please fill in all fields');
             return false;
         }
     };
@@ -121,7 +121,7 @@ var SigninModel = function () {
                 if (response.msg === '') {
                 }
                 else {
-                    new Toast('error', 'toast-top-full-width', 'Error while deleting: ' + response.msg + '.');
+                    toastr.error('Error while deleting: ' + response.msg + '.');
                 }
             });
         }
@@ -154,10 +154,10 @@ var SigninModel = function () {
                 callback();
             }
             else{
-                new Toast('error', 'toast-top-full-width', 'Error: ' + res.msg);
+                toastr.error('Error: ' + res.msg);
             }
         }).fail(function(stuff, error){
-            new Toast('error', 'toast-top-full-width', 'Edit user failed.');
+            toastr.error('Edit user failed.');
         });
     };
 
@@ -167,14 +167,14 @@ var SigninModel = function () {
             url: '/users/signin/' + name
         }).done(function(res){
             if(res.err){
-                new Toast('error', 'toast-top-full-width', 'Error: ' + res.err);
+                toastr.error('Error: ' + res.err);
             }
             else{
-                new Toast('success', 'toast-top-full-width', 'welcome ' + name);
+                toastr.success('Welcome ' + name);
                 $('#signinTextBox').val('');
             }
         }).fail(function(res){
-            new Toast('error', 'toast-top-full-width', 'Error: ' + res.responseText);
+            toastr.error('Error: ' + res.responseText);
         });
     };
 };
