@@ -101,11 +101,11 @@ var SigninModel = function () {
                 url: '/users/adduser'
             }).done(function(response) {
                 callback();
-                alert(response);
+                new Toast('success', 'toast-top-full-width', 'User added successfully');
             });
         }
         else {
-            alert('Please fill in all fields');
+            new Toast('error', 'toast-top-full-width', 'Please fill in all fields');
             return false;
         }
     };
@@ -121,7 +121,7 @@ var SigninModel = function () {
                 if (response.msg === '') {
                 }
                 else {
-                    alert('Error: ' + response.msg);
+                    new Toast('error', 'toast-top-full-width', 'Error while deleting: ' + response.msg + '.');
                 }
             });
         }
@@ -154,10 +154,10 @@ var SigninModel = function () {
                 callback();
             }
             else{
-                alert('Error: ' + res.msg);
+                new Toast('error', 'toast-top-full-width', 'Error: ' + res.msg);
             }
         }).fail(function(stuff, error){
-            alert('fail');
+            new Toast('error', 'toast-top-full-width', 'Edit user failed.');
         });
     };
 
@@ -167,14 +167,14 @@ var SigninModel = function () {
             url: '/users/signin/' + name
         }).done(function(res){
             if(res.err){
-                alert(res.err);
+                new Toast('error', 'toast-top-full-width', 'Error: ' + res.err);
             }
             else{
-                alert('welcome ' + name);
+                new Toast('success', 'toast-top-full-width', 'welcome ' + name);
                 $('#signinTextBox').val('');
             }
         }).fail(function(res){
-            alert(res.responseText);
+            new Toast('error', 'toast-top-full-width', 'Error: ' + res.responseText);
         });
     };
 };
