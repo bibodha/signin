@@ -26,9 +26,9 @@ var SigninModel = function () {
             {id: "dateOfBirth", name: "DOB", field: "dateOfBirth", minWidth:87},
             {id: "gender", name: "Gender", field: "gender", maxWidth:62},
             {id: "school", name: "School", field: "school", minWidth: 100},
-            {id: "edit", name: "Action", field: "edit", minWidth:100, 
-                formatter: function(row, cell, value, columnDef, dataContext){ 
-                               return '<a href="#" id="edit-user" data-id="' + dataContext['_id'] + '">Edit</a>/'+ 
+            {id: "edit", name: "Action", field: "edit", minWidth:100,
+                formatter: function(row, cell, value, columnDef, dataContext){
+                               return '<a href="#" id="edit-user" data-id="' + dataContext['_id'] + '">Edit</a>/'+
                                       '<a href="#" id="delete-user" data-id="' + dataContext['_id'] + '">Delete</a>';
                 }
             }
@@ -189,6 +189,7 @@ var $body = $(document.body),
 
 mySignin.populateTable();
 
+toastr.options.positionClass = 'toast-top-full-width';
 $body.on('submit', '#signinForm', function(event){
     event.preventDefault();
     mySignin.signin($('#signinTextBox').val());
@@ -230,4 +231,3 @@ $('#add-input-dateOfBirth').datepicker();
 $('#edit-input-dateOfBirth').datepicker();
 $('#add-input-zip').numeric();
 $('#edit-input-zip').numeric();
-
