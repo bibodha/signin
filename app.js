@@ -4,6 +4,7 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
 
 //Database
 var mongo = require('mongoskin');
@@ -30,8 +31,11 @@ app.use(function(req, res, callback){
     callback();
 });
 
+var login = require('./routes/login');
+
 app.use('/', routes);
 app.use('/users', users);
+app.use('/', login);
 app.locals.edit = false;
 
 /// catch 404 and forward to error handler

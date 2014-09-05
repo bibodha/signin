@@ -16,7 +16,7 @@ router.post('/adduser', function(req, res){
     newUser.username = (newUser.firstname + ' ' + newUser.lastname).toLowerCase();
 
     db.collection('userlist').find({firstname: newUser.firstname, lastname: newUser.lastname}).toArray(function(err, items){
-        var length = items.length; 
+        var length = items.length;
         if(length > 0){
             var lastUsername = items[length - 1].username;
             var num = parseInt(lastUsername.split(' ')[2]);
