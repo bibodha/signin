@@ -33,6 +33,8 @@ app.use(function(req, res, callback){
 
 var login = require('./routes/login');
 
+require('./config/passport')(db, passport);
+
 app.use('/', routes);
 app.use('/users', users);
 app.use('/', login);
