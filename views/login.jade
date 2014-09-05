@@ -3,7 +3,7 @@ extends layout
 block content
   form.form-signin(role='form' action='/login' method='post')
     h2 Please sign in
-    input.form-control(type='text', placeholder='Email address', autofocus='')
-    input.form-control(type='password', placeholder='Password', )
+    input.form-control(type='text', name='username' placeholder='username', autofocus='')
+    input.form-control(type='password', name='password' placeholder='Password', )
     br
     button.btn.btn-lg.btn-primary.btn-block(type='submit') Sign in
