@@ -41,9 +41,6 @@ app.use(function(req, res, callback){
     callback();
 });
 
-
-var login = require('./routes/login')(app, passport);
-
 app.use('/', routes);
 app.use('/users', users);
 app.locals.edit = false;
