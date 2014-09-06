@@ -17,7 +17,6 @@ var config = require('./config/passport')(db, passport);
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -30,8 +29,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //passport
-app.use(session({secret: 'somesecretphrase', 
-                 saveUninitialized: true, 
+app.use(session({secret: 'somesecretphrase',
+                 saveUninitialized: true,
                  resave: true}));
 app.use(passport.initialize());
 app.use(passport.session());
