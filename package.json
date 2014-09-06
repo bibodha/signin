@@ -20,7 +20,8 @@
     "connect-flash": "^0.1.1",
     "mongoskin": "~1.4.4",
     "passport" : "~0.2.1",
-    "passport-local" : "~1.0.0"
+    "passport-local" : "~1.0.0",
+    "express-session" : "~1.7.6"
   },
   "devDependencies": {
     "jquery.event.drag": "^2.2.2"
