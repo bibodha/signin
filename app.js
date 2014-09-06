@@ -1,18 +1,21 @@
 var express = require('express');
+var app = express();
 var path = require('path');
 var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
+var flash = require('connect-flash');
+var mongo = require('mongoskin');
+var session = require('express-session');
 
 //Database
-var mongo = require('mongoskin');
 var db = mongo.db(process.env.MONGOHQ_URL || 'mongodb://localhost:27017/signin', {native_parser:true});
 
+var config = require('./config/passport')(db, passport);
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
-var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,9 +24,17 @@ app.set('view engine', 'jade');
 app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//passport
+app.use(session({secret: 'somesecretphrase',
+                 saveUninitialized: true,
+                 resave: true}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 app.use(function(req, res, callback){
     req.db = db;
