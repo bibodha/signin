@@ -2,14 +2,14 @@ var express = require('express');
 var router = express.Router();
 var ObjectId = require('mongodb').ObjectID;
 
-router.get('/userlist', function(req, res){
+router.get('/userlist', isLoggedIn, function(req, res){
     var db = req.db;
     db.collection('userlist').find().toArray(function(err, items){
         res.json(items);
     });
 });
 
-router.post('/adduser', function(req, res){
+router.post('/adduser', isLoggedIn, function(req, res){
     var db = req.db;
 
     var newUser = req.body;
@@ -38,7 +38,7 @@ router.post('/adduser', function(req, res){
     });
 });
 
-router.delete('/deleteuser/:id', function(req, res){
+router.delete('/deleteuser/:id', isLoggedIn, function(req, res){
     var db = req.db;
     var userToDelete = req.params.id;
     db.collection('userlist').removeById(userToDelete, function(err, result){
@@ -51,7 +51,7 @@ router.delete('/deleteuser/:id', function(req, res){
     });
 });
 
-router.post('/edituser', function(req, res){
+router.post('/edituser', isLoggedIn, function(req, res){
     var db = req.db,
         user = req.body,
         id = new ObjectId(user._id);
@@ -67,7 +67,7 @@ router.post('/edituser', function(req, res){
     });
 });
 
-router.post('/getuser/:id', function(req, res){
+router.post('/getuser/:id', isLoggedIn, function(req, res){
     var db = req.db,
         userToFetch = req.params.id,
         user = '';
@@ -82,7 +82,7 @@ router.post('/getuser/:id', function(req, res){
     });
 });
 
-router.post('/signin/:name', function(req, res){
+router.post('/signin/:name', isLoggedIn, function(req, res){
     var db = req.db,
     date = new Date,
     name = req.params.name.toLowerCase(),
@@ -107,5 +107,15 @@ router.post('/signin/:name', function(req, res){
         }
     });
 });
+
+function isLoggedIn(req, res, next) {
+    // if user is authenticated in the session, carry on
+  if (req.isAuthenticated()){
+    return next();
+  } else {
+  // if they aren't redirect them to the home page
+    res.redirect('/login');
+  }
+};
 
 module.exports = router;
