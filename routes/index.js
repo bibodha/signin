@@ -4,7 +4,11 @@ var passport = require('passport');
 
 /* GET home page. */
 router.get('/', isLoggedIn, function(req, res) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Clubhouse Sign In' });
+});
+
+router.get('/admin', isLoggedIn, function(req, res){
+  res.render('admin', {title: 'Admin Control Panel'});
 });
 
 router.get('/login', function(req, res) {
