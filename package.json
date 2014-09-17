@@ -4,27 +4,23 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "nodemon": "nodemon --debug ./bin/www",
-    "mongo": "mongod --dbpath data/db/",
+    "pg" : "pg_ctl start",
+    "nodemon" : "nodemon --debug ./bin/www",
     "debug": "node-inspector"
   },
   "dependencies": {
-    "express": "~4.2.0",
-    "static-favicon": "~1.0.0",
-    "morgan": "~1.0.0",
-    "cookie-parser": "~1.0.1",
+    "bcrypt-nodejs": "~0.0.3",
     "body-parser": "~1.0.0",
-    "debug": "~0.7.4",
-    "jade": "~1.3.0",
-    "mongodb": "~1.4.10",
     "connect-flash": "^0.1.1",
-    "mongoskin": "~1.4.4",
-    "passport" : "~0.2.1",
-    "passport-local" : "~1.0.0",
-    "express-session" : "~1.7.6",
-    "bcrypt-nodejs" : "~0.0.3"
-  },
-  "devDependencies": {
-    "jquery.event.drag": "^2.2.2"
+    "cookie-parser": "~1.0.1",
+    "debug": "~0.7.4",
+    "express": "~4.2.0",
+    "express-session": "~1.7.6",
+    "jade": "~1.3.0",
+    "morgan": "~1.0.0",
+    "passport": "~0.2.1",
+    "passport-local": "~1.0.0",
+    "static-favicon": "~1.0.0",
+    "pg.js": "~3.4.2"
   }
 }

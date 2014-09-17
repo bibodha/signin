@@ -4,8 +4,8 @@ var ObjectId = require('mongodb').ObjectID;
 
 router.get('/userlist', isLoggedIn, function(req, res){
     var db = req.db;
-    db.collection('userlist').find().toArray(function(err, items){
-        res.json(items);
+    db.query('SELECT * FROM signin.kids', function(err, result){
+        res.json(result.rows);
     });
 });
 
@@ -14,8 +14,7 @@ router.post('/adduser', isLoggedIn, function(req, res){
 
     var newUser = req.body;
     newUser.username = (newUser.firstname + ' ' + newUser.lastname).toLowerCase();
-
-    db.collection('userlist').find({firstname: newUser.firstname, lastname: newUser.lastname}).toArray(function(err, items){
+    db.query('SELECT * FROM signin.kids WHERE firstName = $1 AND lastName = $2', [newUser.firstname, newUser.lastname], function(err, result){
         var length = items.length;
         if(length > 0){
             var lastUsername = items[length - 1].username;
@@ -28,13 +27,16 @@ router.post('/adduser', isLoggedIn, function(req, res){
             }
             newUser.username += ' ' + num;
         }
-        db.collection('userlist').insert(req.body, function(err, result){
-            if(err === null){
-                res.send(200, result);
-            }else{
-                res.send({msg: err});
-            }
-        });
+        db.query('INSERT INTO signin.kids (firstName, lastName, userName, street, city, state, zip, dateOfBirth, gender, school) VALUES ($0, $1, $2, $3, $4, $5, $6, $7, $8, $9)',
+                  [newUser.firstname, newUser.lastname, newUser.street, newUser.city, newUser.state, newUser.zip,
+                   newUser.dateOfBirth, newUser.gender, newUser.school], function(err, result){
+                     if(err){
+                       res.send(err);
+                     }
+                     else {
+                       res.send(200, result);
+                     }
+                   });
     });
 });
 

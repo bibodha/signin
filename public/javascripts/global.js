@@ -80,7 +80,11 @@ var SigninModel = function () {
     self.populateTable = function () {
         var tableContent = '';
         $.getJSON( '/users/userlist', function( data ) {
-            dataView.setItems(data, '_id');
+            _.forEach(data, function(item){
+                item.dateOfBirth = new Date(item.dateOfBirth).toLocaleDateString();
+                item.gender === '1' ? item.gender = 'Male' : item.gender = 'Female';
+            });
+            dataView.setItems(data, 'kidsId');
         });
     };
 
