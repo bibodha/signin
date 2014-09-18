@@ -43,7 +43,7 @@ router.post('/adduser', isLoggedIn, function(req, res){
 router.delete('/deleteuser/:id', isLoggedIn, function(req, res){
     var db = req.db;
     var userToDelete = req.params.id;
-    db.collection('userlist').removeById(userToDelete, function(err, result){
+    db.query('DELETE FROM signin.kids WHERE kids.id = $1', [userToDelete], function(err, result){
         if(err === null){
             res.send(200, result);
         }
@@ -56,12 +56,12 @@ router.delete('/deleteuser/:id', isLoggedIn, function(req, res){
 router.post('/edituser', isLoggedIn, function(req, res){
     var db = req.db,
         user = req.body,
-        id = new ObjectId(user._id);
-        //deleting id because mongo will also attempt to update it causing problems.
-        delete(user._id);
-    db.collection('userlist').update({_id: id}, {$set: user}, function(err, result){
+    queryStr = 'UPDATE signin.kids SET firstname=' + user.firstName + ', lastName=' + user.lastName +
+               ', street=' + user.street + ', city=' + user.city + ', state=' + user.state + ', zip=' + user.zip +
+               ', dateOfBirth=' + user.dateOfBirth + ', gender=' + user.gender + ', school = ' + user.school + ' WHERE kids.Id = ' + user.id;
+    db.query(queryStr, function(err, result){
         if(err === null){
-            res.send(200, result);
+            res.send(200, result.rows[0]);
         }
         else{
             res.send({msg: err});
@@ -69,36 +69,22 @@ router.post('/edituser', isLoggedIn, function(req, res){
     });
 });
 
-router.post('/getuser/:id', isLoggedIn, function(req, res){
-    var db = req.db,
-        userToFetch = req.params.id,
-        user = '';
-
-    db.collection('userlist').findById(userToFetch, function(err, result){
-        if(err === null){
-            res.send(200, result);
-        }
-        else{
-            res.send(err);
-        }
-    });
-});
-
 router.post('/signin/:name', isLoggedIn, function(req, res){
     var db = req.db,
-    date = new Date,
     name = req.params.name.toLowerCase(),
-    user;
+    user,
+    query = "SELECT * FROM signin.kids where kids.username = '" + name + "'";
 
-    db.collection('userlist').findOne({username: name}, function(err, result){
-        user = result;
+    db.query(query, function(err, result){
+        user = result.rows[0];
         if(err){
             res.send(404, 'User not found');
         }
         if(user){
-            db.collection('signin').insert({userId: user._id, signinTime: date.toLocaleString()}, function(err, result){
+            query = 'INSERT INTO signin."kidsSignin" ("kidsId") VALUES('+ user.kidsId+')';
+            db.query(query, function(err, result){
                 if(err === null){
-                    res.send(200, result);
+                    res.send(200, result.rows[0]);
                 }
                 else{
                     res.send('There was an error: ' + err);
