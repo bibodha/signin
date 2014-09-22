@@ -33,7 +33,7 @@ module.exports = function(db, passport) {
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
         db = req.db;
-        db.query('SELECT * FROM signin.admin WHERE username = $1', [inputUsername], function(err, result){
+        db.query('SELECT * FROM "signin"."admin" WHERE username = $1', [inputUsername], function(err, result){
             // if there are any errors, return the error before anything else
             var user = result.rows[0];
             if (err)

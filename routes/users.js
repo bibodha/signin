@@ -14,8 +14,9 @@ router.post('/adduser', isLoggedIn, function(req, res){
 
     var newUser = req.body;
     newUser.username = (newUser.firstname + ' ' + newUser.lastname).toLowerCase();
-    db.query('SELECT * FROM signin.kids WHERE firstName = $1 AND lastName = $2', [newUser.firstname, newUser.lastname], function(err, result){
-        var length = items.length;
+    db.query('SELECT * FROM "signin"."kids" WHERE firstName like $1 AND lastName like $2',
+            ['%' + newUser.firstname + '%', '%' + newUser.lastname+ '%'], function(err, result){
+        var length = result.rows.length;
         if(length > 0){
             var lastUsername = items[length - 1].username;
             var num = parseInt(lastUsername.split(' ')[2]);
@@ -27,9 +28,20 @@ router.post('/adduser', isLoggedIn, function(req, res){
             }
             newUser.username += ' ' + num;
         }
-        db.query('INSERT INTO signin.kids (firstName, lastName, userName, street, city, state, zip, dateOfBirth, gender, school) VALUES ($0, $1, $2, $3, $4, $5, $6, $7, $8, $9)',
-                  [newUser.firstname, newUser.lastname, newUser.street, newUser.city, newUser.state, newUser.zip,
-                   newUser.dateOfBirth, newUser.gender, newUser.school], function(err, result){
+        newUser.gender === 'Male' ? newUser.gender = 1 : newUser.gender = 0;
+        var query ="INSERT INTO signin.kids(firstname, lastname, username, street, city, state, zip, \"dateOfBirth\", gender, school) VALUES ('" +
+                    newUser.firstname + "' , '" +
+                    newUser.lastname + "', '" +
+                    newUser.username + "', '" +
+                    newUser.street + "', '" +
+                    newUser.city + "', '" +
+                    newUser.state + "', '" +
+                    newUser.zip + "', '" +
+                    newUser.dateOfBirth + "', '" +
+                    newUser.gender + "', '" +
+                    newUser.school +"')";
+
+        db.query(query, function(err, result){
                      if(err){
                        res.send(err);
                      }
@@ -43,7 +55,7 @@ router.post('/adduser', isLoggedIn, function(req, res){
 router.delete('/deleteuser/:id', isLoggedIn, function(req, res){
     var db = req.db;
     var userToDelete = req.params.id;
-    db.query('DELETE FROM signin.kids WHERE kids.id = $1', [userToDelete], function(err, result){
+    db.query('DELETE FROM "signin"."kids" WHERE kids.id = $1', [userToDelete], function(err, result){
         if(err === null){
             res.send(200, result);
         }
@@ -56,7 +68,7 @@ router.delete('/deleteuser/:id', isLoggedIn, function(req, res){
 router.post('/edituser', isLoggedIn, function(req, res){
     var db = req.db,
         user = req.body,
-    queryStr = 'UPDATE signin.kids SET firstname=' + user.firstName + ', lastName=' + user.lastName +
+    queryStr = 'UPDATE "signin"."kids" SET firstname=' + user.firstName + ', lastName=' + user.lastName +
                ', street=' + user.street + ', city=' + user.city + ', state=' + user.state + ', zip=' + user.zip +
                ', dateOfBirth=' + user.dateOfBirth + ', gender=' + user.gender + ', school = ' + user.school + ' WHERE kids.Id = ' + user.id;
     db.query(queryStr, function(err, result){
@@ -71,11 +83,10 @@ router.post('/edituser', isLoggedIn, function(req, res){
 
 router.post('/signin/:name', isLoggedIn, function(req, res){
     var db = req.db,
-    name = req.params.name.toLowerCase(),
-    user,
-    query = "SELECT * FROM signin.kids where kids.username = '" + name + "'";
+    username = req.params.name.toLowerCase(),
+    user;
 
-    db.query(query, function(err, result){
+    db.query('SELECT * FROM "signin"."kids" where "kids"."username" like $1', ['%' + username + '%'], function(err, result){
         user = result.rows[0];
         if(err){
             res.send(404, 'User not found');

@@ -19,9 +19,7 @@ router.post('/login', passport.authenticate('local-login', {
         failureFlash : true
     }));
 
-// =====================================
-// LOGOUT ==============================
-// =====================================
+// process logout
 router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/login');
