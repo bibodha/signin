@@ -67,16 +67,17 @@ router.delete('/deleteuser/:id', isLoggedIn, function(req, res){
 
 router.post('/edituser', isLoggedIn, function(req, res){
     var db = req.db,
-        user = req.body,
-    queryStr = 'UPDATE "signin"."kids" SET firstname=' + user.firstName + ', lastName=' + user.lastName +
-               ', street=' + user.street + ', city=' + user.city + ', state=' + user.state + ', zip=' + user.zip +
-               ', dateOfBirth=' + user.dateOfBirth + ', gender=' + user.gender + ', school = ' + user.school + ' WHERE kids.Id = ' + user.id;
+        user = req.body;
+    user.gender === 'Male' ? user.gender = 1 : user.gender = 0;
+    var queryStr = "UPDATE signin.kids SET firstname='" + user.firstname + "', lastName='" + user.lastname +
+               "', street='" + user.street + "', city='" + user.city + "', state='" + user.state + "', zip='" + user.zip +
+               "', \"dateOfBirth\"='" + user.dateOfBirth + "', gender='" + user.gender + "', school ='" + user.school + "' WHERE \"kidsId\" = " + user.kidsId;
     db.query(queryStr, function(err, result){
         if(err === null){
-            res.send(200, result.rows[0]);
+            res.send(200, "success");
         }
         else{
-            res.send({msg: err});
+            res.send({err: err.message});
         }
     });
 });

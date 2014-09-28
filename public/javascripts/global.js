@@ -3,7 +3,7 @@ var SigninModel = function () {
         user = {},
         dataView = new Slick.Data.DataView(),
         userPropertyList = [
-            '_id',
+            'kidsId',
             'firstname',
             'lastname',
             'username',
@@ -28,8 +28,8 @@ var SigninModel = function () {
             {id: "school", name: "School", field: "school", minWidth: 100},
             {id: "edit", name: "Action", field: "edit", minWidth:100,
                 formatter: function(row, cell, value, columnDef, dataContext){
-                               return '<a href="#" id="edit-user" data-id="' + dataContext['_id'] + '">Edit</a>/'+
-                                      '<a href="#" id="delete-user" data-id="' + dataContext['_id'] + '">Delete</a>';
+                               return '<a href="#" id="edit-user" data-id="' + dataContext['kidsId'] + '">Edit</a>/'+
+                                      '<a href="#" id="delete-user" data-id="' + dataContext['kidsId'] + '">Delete</a>';
                 }
             }
         ],
@@ -74,7 +74,7 @@ var SigninModel = function () {
     };
 
     var linkFormatter = function ( row, cell, value, columnDef, dataContext ) {
-        return '<a href="#' + dataContext['_id'] + '">' + value + '</a>';
+        return '<a href="#' + dataContext['kidsId'] + '">' + value + '</a>';
     };
 
     self.populateTable = function () {
@@ -138,7 +138,7 @@ var SigninModel = function () {
         var selectedRow = grid.getSelectedRows(),
             user = grid.getDataItem(selectedRow);
         self.setUserObjectToForm('edit', user);
-        $('#edit-input-id').val(user._id);
+        $('#edit-input-kidsId').val(user.kidsId);
         $('#editUserModal').modal('show');
     };
 
@@ -151,14 +151,13 @@ var SigninModel = function () {
             type: 'POST',
             url: '/users/edituser/',
             data: user
-        }).done(function(){
-            if(res.err === null){
-                var user = res.msg;
-                self.setUserObjectToForm(user);
+        }).done(function(res){
+            if(res === "success"){
+                self.populateTable();
                 callback();
             }
             else{
-                toastr.error('Error: ' + res.msg);
+                toastr.error('Error: ' + res.err);
             }
         }).fail(function(stuff, error){
             toastr.error('Edit user failed.');
