@@ -7,11 +7,23 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var flash = require('connect-flash');
-var mongo = require('mongoskin');
+var pg = require('pg.js');
 var session = require('express-session');
 
 //Database
-var db = mongo.db(process.env.MONGOHQ_URL || 'mongodb://localhost:27017/signin', {native_parser:true});
+var conString = process.env.DATABASE_URL || 'postgres://admin:test@localhost/clubhouse';
+
+var db = '';
+
+pg.connect(conString, function(err, client, done){
+    if(err){
+      return console.error('error fetching client from pool', err);
+    }
+    else {
+      db = client;
+      return console.log('connected to PostgreSQL');
+    }
+});
 
 var config = require('./config/passport')(db, passport);
 var routes = require('./routes/index');
