@@ -55,12 +55,12 @@ router.post('/adduser', isLoggedIn, function(req, res){
 router.delete('/deleteuser/:id', isLoggedIn, function(req, res){
     var db = req.db;
     var userToDelete = req.params.id;
-    db.query('DELETE FROM "signin"."kids" WHERE kids.id = $1', [userToDelete], function(err, result){
+    db.query('DELETE FROM "signin"."kids" WHERE "kidsId" = $1', [userToDelete], function(err, result){
         if(err === null){
-            res.send(200, result);
+            res.send(200, "success");
         }
         else{
-            res.send(err);
+            res.send({err: err.message});
         }
     });
 });

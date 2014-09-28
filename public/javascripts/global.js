@@ -121,11 +121,11 @@ var SigninModel = function () {
             $.ajax({
                 type: 'DELETE',
                 url: '/users/deleteuser/' + id
-            }).done(function( response ) {
-                if (response.msg === '') {
+            }).done(function(res) {
+                if (res === 'success') {
                 }
                 else {
-                    toastr.error('Error while deleting: ' + response.msg + '.');
+                    toastr.error(res.err);
                 }
             });
         }
